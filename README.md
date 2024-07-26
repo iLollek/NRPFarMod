@@ -49,3 +49,5 @@ This means that now NPRFarMod is going to monitor the music in the game. As soon
 [iLollek](https://github.com/iLollek/) - NRPFarMod Developer & Repository Owner
 
 [Jem Byrne (PLANET JEM Software)](https://linktr.ee/night_runners) - Developer of the Game that this Mod is developed for
+
+*Using AssetUnlocker is piracy!*
