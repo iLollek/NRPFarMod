@@ -52,7 +52,7 @@ By talking about the Mod on Reddit or any other Platform, to give it Publicity, 
 
 Or, if you're able to Code, you can commit to this Repository and fix Issues with us!
 
-You can leave a Star to this Repository or follow one of the Developers!
+You can leave a Star to this Repository or follow the Developers!
 
 Lastly, you can also Donate Money to the Repository Owner by pressing the "Sponsor" Button at the top.
 
