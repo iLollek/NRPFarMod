@@ -8,15 +8,25 @@ In this Section you will learn how to Install the Mod and how to use it.
 To Install, you need to have [MelonLoader](https://melonloader.xyz) Installed on your NIGHT-RUNNERS Instance!
 
 1: Install NIGHT-RUNNERS: Prologue (Either from Steam or Itch.io)
+
 2: Install MelonLoader to your NIGHT-RUNNERS instance. Run the MelonLoader installer and select the NIGHT-RUNNERS executable (.exe) file.
+
 3: Start NIGHT-RUNNERS and verify that the game can start normally (attempt to go into your garage at least).
+
 4: Close NIGHT-RUNNERS
+
 5: Download the latest NRPFarMod.dll File. You can find it in this Repositories [Releases](https://github.com/iLollek/NRPFarMod/releases) Tab.
+
 6: MelonLoader will create several new folders in your NIGHT-RUNNERS game folder. Locate the "Mods" folder.
+
 7: Copy or Move the "NRPFarMod.dll" File into the "Mods" Folder.
+
 8: Inside the "Mods" Folder, create a Folder named "src" (Verify that the folder is named "src", like here, in all lowercase letters! This is important!)
+
 9: Copy or Move your Music Files - They have to be the WAVE Audioformat (.wav) - Into the "src" Folder.
+
 10: Start NIGHT-RUNNERS. If everything worked correctly, you should see green text in the top right corner of your screen in NIGHT-RUNNERS.
+
 ## Usage
 Currently, the mod supports two main ways of loading your own music:
 - Overwrite Mode (directly overwrites the currently playing music with one that you imported and selected)
