@@ -43,6 +43,19 @@ Playlist Mode works differently. It's designed to give the illusion that the son
 
 This means that now NPRFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
 
+# Support
+If you want to Support the Development of the NRPFarMod, you can do so in many ways!
+
+For example, by reporting Bugs or suggesting new Features, you can help this Mod become better.
+
+By talking about the Mod on Reddit or any other Platform, to give it Publicity, so more people can use it and thus, maybe Support it.
+
+Or, if you're able to Code, you can commit to this Repository and fix Issues with us!
+
+Lastly, you can also Donate Money to the Repository Owner by pressing the "Sponsor" Button at the top.
+
+Thank you!
+
 # Credits
 [Farliam](https://github.com/Farliam93/) - Created the first Version of this Mod (1.0.0)
 
