@@ -38,5 +38,7 @@ You can also immediately call this overwrite without having to open the GUI of t
 
 ### Playlist Mode
 Playlist Mode works differently. It's designed to give the illusion that the songs are added to the game's playlist. To start the PlaylistWatcher thread, press "M" on your keyboard. In the MelonLoader log, it will now say something like this:
+
 `[NRPFarMod] Started PlaylistWatcher Thread!`
+
 This means that now NPRFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
