@@ -42,3 +42,10 @@ Playlist Mode works differently. It's designed to give the illusion that the son
 `[NRPFarMod] Started PlaylistWatcher Thread!`
 
 This means that now NPRFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
+
+# Credits
+[Farliam](https://github.com/Farliam93/) - Created the first Version of this Mod (1.0.0)
+
+[iLollek](https://github.com/iLollek/) - NRPFarMod Developer & Repository Owner
+
+[Jem Byrne (PLANET JEM Software)](https://linktr.ee/night_runners) - Developer of the Game that this Mod is developed for
