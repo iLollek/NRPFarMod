@@ -1,6 +1,6 @@
 # NRPFarMod - Welcome!
 
-Below you will find Information about the NRPFarMod. Happy listening!
+Below you will find Information about the Night Runners Prologue Farliam Mod (NRPFarMod). Happy listening!
 
 # Quick Start - How to Install & Use
 In this Section you will learn how to Install the Mod and how to use it.
