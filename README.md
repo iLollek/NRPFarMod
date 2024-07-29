@@ -41,7 +41,7 @@ Playlist Mode works differently. It's designed to give the illusion that the son
 
 `[NRPFarMod] Started PlaylistWatcher Thread!`
 
-This means that now NPRFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
+This means that now NRPFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
 
 # Bugs & Issues
 Found something that doesn't work? Please verify that your Issue isn't already known (In the "Known Issues" section) and that is has not been reported in the [Issues Tab](https://github.com/iLollek/NRPFarMod/issues) already.
