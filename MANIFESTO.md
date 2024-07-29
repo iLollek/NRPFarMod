@@ -14,4 +14,6 @@ NIGHT-RUNNERS Prologue - Modder Manifesto
 
 6: Your mod must add new content or features to the game.
 
-7: Using a Car Unlocker or Asset Unlocker is piracy.
+7: Include this MANIFESTO.md File in your Mod's repository.
+
+8: Using a Car Unlocker or Asset Unlocker is piracy.
