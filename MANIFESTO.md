@@ -8,7 +8,7 @@ NIGHT-RUNNERS Prologue - Modder Manifesto
 
 3: Your mod must be free of charge.
 
-4: If something in the game doesn't work, uninstall all Mods and MelonLoader, try again, and only if the issue persists, report a bug.
+4: If your game is Modded using MelonLoader, do not report any Bugs to Jem.
 
 5: Publish your mod under the GPL 3.0 License.
 
