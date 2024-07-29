@@ -4,7 +4,7 @@
 
 1: Open-source your mod.
 
-2: Only share confidential game information with other modders who follow this Manifesto.
+2: Only share confidential game information with other modders who abide by this Manifesto.
 
 3: Your mod must be free of charge.
 
