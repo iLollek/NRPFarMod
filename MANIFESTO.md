@@ -8,7 +8,7 @@
 
 3: Your mod must be free of charge.
 
-4: If your game is Modded using MelonLoader, do not report any Bugs to Jem.
+4: If your game is Modded using MelonLoader, BepInEx or any other type of Unity Modding Utility, do not report any Bugs to Jem.
 
 5: Publish your mod under the GPL 3.0 License.
 
@@ -16,4 +16,4 @@
 
 7: Include this MANIFESTO.md File in your Mod's repository.
 
-8: Using a Car Unlocker or Asset Unlocker is piracy.
+8: Content unlockers and asset ripping are not considered mods.
