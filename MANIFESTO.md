@@ -1,4 +1,4 @@
-NIGHT-RUNNERS Prologue - Modder Manifesto
+# NIGHT-RUNNERS Prologue - Modder Manifesto
 
 *This Manifesto serves as a moral guideline for NIGHT-RUNNERS Prologue Modders.*
 
