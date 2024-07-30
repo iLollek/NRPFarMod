@@ -43,6 +43,24 @@ Playlist Mode works differently. It's designed to give the illusion that the son
 
 This means that now NRPFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
 
+## Usage: How to import your Songs from YouTube & Spotify
+
+It's a relatively common process: Download the Music from your Source (Spotify or YouTube) and then convert the output into WAVE (.wav) and then put that Music into your /src/ Folder.
+
+### Spotify
+Use a Tool to Download Spotify Music off of. For Playlists, you can use this: [Spotify Playlist Downloader Online](https://spotify-downloader.com/)
+
+After that, convert your Files into WAVE (.wav). You can use [this](https://online-audio-converter.com/) Tool. Select CD Quality or DVD Quality, if available.
+
+Finally, move your Downloaded .wav Files into the /src/ Directory where your Mod (NRPFarMod.dll) is located.
+
+### YouTube
+Use a Tool to Download YouTube Music off of. You can use [this](https://en1.savefrom.net/1-youtube-video-downloader-3vV/) Tool. (Hey! I also made a [YouTube Downloader in Python](https://ilollek.net/pyd-rem/download.html)!)
+
+After that, convert your Files into WAVE (.wav). You can use [this](https://online-audio-converter.com/) Tool. Select CD Quality or DVD Quality, if available.
+
+Finally, move your Downloaded .wav Files into the /src/ Directory where your Mod (NRPFarMod.dll) is located.
+
 # Bugs & Issues
 Found something that doesn't work? Please verify that your Issue isn't already known (In the "Known Issues" section) and that is has not been reported in the [Issues Tab](https://github.com/iLollek/NRPFarMod/issues) already.
 ## Reporting a Bug
