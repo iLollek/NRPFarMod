@@ -51,7 +51,7 @@ First, verify if you're on the newest Release of NRPFarMod. Maybe your Issue has
 If something doesn't work, please [create a Issue](https://github.com/iLollek/NRPFarMod/issues/new). Give a Detailed Description of your Issue and if possible, always provide Screenshots. This helps us fix your Issue faster.
 
 ## Known Issues
-- No known Issues.
+- The Text on the phone doesn't show, or doesn't show correctly. I can't change this without patching a method -- And I want this Mod to be minimally intrusive, so I have to wait for Jem to change how he loads ``phoneNowPlaying`` in a future Update.
 
 # Support
 If you want to Support the Development of the NRPFarMod, you can do so in many ways!
