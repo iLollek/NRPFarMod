@@ -1,0 +1,1 @@
+move "<path_to_this_folder>\bin\Debug\net6.0\NRPFarmod.dll" "<path_to_night_runners>\Mods"
