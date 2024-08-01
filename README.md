@@ -44,6 +44,14 @@ Playlist Mode works differently. It's designed to give the illusion that the son
 
 This means that now NRPFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
 
+### Manually Removing unused Songs to free RAM
+
+While the Playlist Simulator automatically takes care of Memory Management, you might want to free RAM manually. This is mandatory when you use **Overwrite Mode**.
+
+You can press `N` on your Keyboard to manually execute the ``RemoveUnusedSongs()`` Method. This will remove unused, but loaded Songs from your RAM.
+
+The game *might* freeze for half a second when this executes.
+
 ## Usage: How to import your Songs from YouTube & Spotify
 
 It's a relatively common process: Download the Music from your Source (Spotify or YouTube) and then convert the output into WAVE (.wav) and then put that Music into your /src/ Folder.
