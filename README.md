@@ -71,7 +71,7 @@ After that, convert your Files into WAVE (.wav). You can use [this](https://onli
 
 Finally, move your Downloaded .wav Files into the /src/ Directory where your Mod (NRPFarMod.dll) is located.
 
-### Hotkeys
+## Usage: Hotkeys
 
 | Key  | Function |
 | ------------- | ------------- |
@@ -105,6 +105,20 @@ You can leave a Star to this Repository or follow the Developers!
 Lastly, you can also Donate Money to the Repository Owner by pressing the "Sponsor" Button at the top.
 
 Thank you!
+
+# Developing for this Mod
+
+If you're thinking of supporting this Mod by Developing for it on this Repository, first up I have to say: Thank you!
+
+There's certain guidelines and criteria I follow for this Mod, and I need to ask you to follow too if you make changes to this Mod that you want to be implemented via a Pull Request.
+
+## Developer: Guidelines
+
+- I want NRPFarMod to be "minimally intrusive" by Design. This means: Your Changes should make minimal, if None at all, changes to the original Code. This basically means things like: do not patch any methods, do not access, change or modify anything you don't find absolutely necessary to do to achieve your feature/bugfix, keep your code minimal, etc.
+
+- Write clean Code. Your Code should be easily maintainable, extensible and readable.
+
+- 
 
 # Credits
 [Farliam](https://github.com/Farliam93/) - Created the first Version of this Mod (1.0.0)
