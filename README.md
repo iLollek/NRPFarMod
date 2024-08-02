@@ -93,6 +93,8 @@ If something doesn't work, please [create a Issue](https://github.com/iLollek/NR
 ## Known Issues
 - The Text on the phone doesn't show, or doesn't show correctly. I can't change this without patching a method -- And I want this Mod to be minimally intrusive, so I have to wait for Jem to change how he loads ``phoneNowPlaying`` in a future Update.
 
+- Sometimes there's a ``NullReferenceException`` when in the Playlist-Mode.
+
 # Support
 If you want to Support the Development of the NRPFarMod, you can do so in many ways!
 
