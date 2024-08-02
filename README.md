@@ -8,7 +8,7 @@ In this Section you will learn how to Install the Mod and how to use it.
 
 An Installation YouTube Tutorial will follow.
 ## Install
-To Install, you need to have [MelonLoader](https://melonloader.xyz) Installed on your NIGHT-RUNNERS Instance!
+To Install, you need to have [MelonLoader](https://melonwiki.xyz) Installed on your NIGHT-RUNNERS Instance!
 
 1: Install NIGHT-RUNNERS: Prologue (Either from Steam or Itch.io)
 
