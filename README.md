@@ -5,6 +5,8 @@ Below you will find Information about the Night Runners Prologue Farliam Mod (NR
 
 # Quick Start - How to Install & Use
 In this Section you will learn how to Install the Mod and how to use it.
+
+An Installation YouTube Tutorial will follow.
 ## Install
 To Install, you need to have [MelonLoader](https://melonloader.xyz) Installed on your NIGHT-RUNNERS Instance!
 
