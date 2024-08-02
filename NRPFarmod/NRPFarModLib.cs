@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 //.\Mods\src\
 
-[assembly: MelonInfo(typeof(NRPFarModLib), "NRPFarModLib", "1.0.2", "Farliam & iLollek")]
+[assembly: MelonInfo(typeof(NRPFarModLib), "NRPFarModLib", "1.0.3", "Farliam & iLollek")]
 [assembly: MelonGame("PLANET JEM SOFTWARE", "NIGHT-RUNNERS PROLOGUE")]
 [assembly: MelonGame("PLANET JEM SOFTWARE", "NIGHT-RUNNERS PROLOGUE PATREON")]
 
