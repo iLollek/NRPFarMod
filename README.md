@@ -24,7 +24,7 @@ To Install, you need to have [MelonLoader](https://melonloader.xyz) Installed on
 
 7: Copy or Move the "NRPFarMod.dll" File into the "Mods" Folder.
 
-8: Inside the "Mods" Folder, create a Folder named "src" (Verify that the folder is named "src", like here, in all lowercase letters! This is important!)
+8: Inside the "Mods" Folder, there will be a new folder named "src"
 
 9: Copy or Move your Music Files - They have to be the WAVE Audioformat (.wav) - Into the "src" Folder.
 
