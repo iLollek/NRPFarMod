@@ -36,13 +36,14 @@ Currently, the mod supports two main ways of loading your own music:
 ### Overwrite Mode 
 When you press INSERT on your keyboard, a small menu on the top left will open up. This menu shows the currently selected track and the hotkeys, `O` and `P`. You can slide the slider with your mouse to select a song, then press Play to immediately overwrite the song that is currently playing in-game with the selected one. Important: There has to be a song already playing for this to work correctly.
 You can also immediately call this overwrite without having to open the GUI of the mod! For example, while driving, you can easily change your song by using the O/P hotkeys.
+**Please note:** Overwrite Mode will be disabled if Playlist Mode is enabled.
 
 ### Playlist Mode
-Playlist Mode works differently. It's designed to give the illusion that the songs are added to the game's playlist. To start the PlaylistWatcher thread, press `M` on your keyboard. In the MelonLoader log, it will now say something like this:
+Playlist Mode works differently. It's designed to give the illusion that the songs are added to the game's playlist. To start the PlaylistWatcher thread, press `M` on your keyboard as soon as there is Music Playing In Game. In the MelonLoader log, it will now say something like this:
 
 `[NRPFarMod] Started PlaylistSimulator WatcherThread.`
 
-This means that now NRPFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 20%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
+This means that now NRPFarMod is going to monitor the music in the game. As soon as it detects that a song has changed - either automatically, because it ended, or because the player used the phone to skip a song - there is a small chance (currently it's 40%) that NRPFarMod will, instead of playing the next normal song (from the game's OST), play one of your custom songs.
 
 ### Manually Removing unused Songs to free RAM
 
@@ -69,6 +70,16 @@ Use a Tool to Download YouTube Music off of. You can use [this](https://en1.save
 After that, convert your Files into WAVE (.wav). You can use [this](https://online-audio-converter.com/) Tool. Select CD Quality or DVD Quality, if available.
 
 Finally, move your Downloaded .wav Files into the /src/ Directory where your Mod (NRPFarMod.dll) is located.
+
+### Hotkeys
+
+| Key  | Function |
+| ------------- | ------------- |
+| INSERT  | Open GUI (Developer) |
+| O  | Previous Song (Overwrite Mode)  |
+| P  | Next Song (Overwrite Mode)  |
+| N  | Remove unused Songs from RAM  |
+| M  | Start Playlist Mode  |
 
 # Bugs & Issues
 Found something that doesn't work? Please verify that your Issue isn't already known (In the "Known Issues" section) and that is has not been reported in the [Issues Tab](https://github.com/iLollek/NRPFarMod/issues) already.
