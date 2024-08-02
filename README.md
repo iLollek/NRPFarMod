@@ -127,6 +127,16 @@ There's certain guidelines and criteria I follow for this Mod, and I need to ask
 When you create a Issue or Pull Request (or anything that requires you to describe the Problem) there is usually a big naming convention and/or template for big repositories. I won't make one (for now), i hope that will work.
 Please describe your Issue or what your added code does in a Pull request extensively and into detail. Provide Screenshots if possible.
 
+## Developer: What to configurate before Building, Editing and Writing
+
+Essentially, you just need to configure your System's paths to point to the files on your Computer.
+
+You will find a few "wildcards" that can look like this: ``<path_to_nightrunners_instance>\Mods`` 
+
+Just replace the Wildcard with what it wants. In this case, replace ``<path_to_nightrunners_instance>`` with a path pointing to your NIGHT-RUNNERS game's folder.
+
+The PostCall.bat automatically copies your newly built modfile (.dll) to your Mods folder so you can save some time for not having to drag and drop it.
+
 # Credits
 [Farliam](https://github.com/Farliam93/) - Created the first Version of this Mod (1.0.0)
 
