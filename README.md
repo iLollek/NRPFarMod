@@ -114,11 +114,18 @@ There's certain guidelines and criteria I follow for this Mod, and I need to ask
 
 ## Developer: Guidelines
 
-- I want NRPFarMod to be "minimally intrusive" by Design. This means: Your Changes should make minimal, if None at all, changes to the original Code. This basically means things like: do not patch any methods, do not access, change or modify anything you don't find absolutely necessary to do to achieve your feature/bugfix, keep your code minimal, etc.
+- I want NRPFarMod to be "minimally intrusive" by Design. This means: Your Changes should make minimal, if None at all, changes to the original Code. This basically means things like: do not patch any methods, do not access, change or modify anything you don't find absolutely necessary to do to achieve your feature/bugfix, keep your code small, etc.
 
 - Write clean Code. Your Code should be easily maintainable, extensible and readable.
 
-- 
+- Resources are not infinite. We are not a AAA-Studio. Do good memory Management. If your added Code introduces **unecessary** framedrops or performance loss in any way, your Pull Request will be denied.
+
+- Game first. We are the ones who are making Mods off of Jem's work, not the other way around. We have to wrap our heads around NIGHT-RUNNERS, not Jem around our Mods.
+
+## Developer: Issues, Pull Requests etc.: Name Conventions
+
+When you create a Issue or Pull Request (or anything that requires you to describe the Problem) there is usually a big naming convention and/or template for big repositories. I won't make one (for now), i hope that will work.
+Please describe your Issue or what your added code does in a Pull request extensively and into detail. Provide Screenshots if possible.
 
 # Credits
 [Farliam](https://github.com/Farliam93/) - Created the first Version of this Mod (1.0.0)
