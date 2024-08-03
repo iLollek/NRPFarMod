@@ -1,1 +1,5 @@
-move "<path_to_this_folder>\bin\Debug\net6.0\NRPFarmod.dll" "<path_to_night_runners>\Mods"
+xcopy "C:\Users\Matze\source\repos\NRPFarMod\NRPFarmod\bin\Debug\net6.0\NRPFarmod.dll" "C:\Program Files (x86)\Steam\steamapps\common\NIGHT-RUNNERS PROLOGUE\Mods" /y
+xcopy "C:\Users\Matze\.nuget\packages\naudio\2.2.1\lib\net6.0\NAudio.dll" "C:\Program Files (x86)\Steam\steamapps\common\NIGHT-RUNNERS PROLOGUE\Mods" /y
+xcopy "C:\Users\Matze\.nuget\packages\naudio.core\2.2.1\lib\netstandard2.0\NAudio.Core.dll" "C:\Program Files (x86)\Steam\steamapps\common\NIGHT-RUNNERS PROLOGUE\Mods" /y
+xcopy "C:\Users\Matze\.nuget\packages\naudio.winmm\2.2.1\lib\netstandard2.0\NAudio.WinMM.dll" "C:\Program Files (x86)\Steam\steamapps\common\NIGHT-RUNNERS PROLOGUE\Mods" /y
+xcopy "C:\Users\Matze\source\repos\NRPFarMod\NRPFarmod\bin\Debug\net6.0\NRPFarmod.pdb" "C:\Program Files (x86)\Steam\steamapps\common\NIGHT-RUNNERS PROLOGUE\Mods" /y
