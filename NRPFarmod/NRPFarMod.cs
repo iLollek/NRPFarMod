@@ -24,7 +24,7 @@ namespace NRPFarmod {
             subModules = new List<MelonCaller>();
             Assembly assembly = Assembly.GetExecutingAssembly();
             var mods = assembly.GetTypes().Where(type => type.IsAssignableTo(typeof(MelonCaller)) && type.BaseType == typeof(MelonCaller)).ToList();
-            MelonLogger.Error($"Gefundene Module: {mods.Count}");
+            MelonLogger.Msg($"Gefundene Module: \u001b[32m{mods.Count}\u001b[0m");
             foreach (var type in mods) {
                 try {
                     var subModul = Activator.CreateInstance(type);

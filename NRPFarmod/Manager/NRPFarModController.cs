@@ -5,6 +5,8 @@ using NRPFarmod;
 using NRPFarmod.MelonCall;
 using NRPFarmod.ContentManager;
 using Il2Cpp;
+using NRPFarmod.CustomUnityScripts;
+using Il2CppInterop.Runtime.Injection;
 
 
 
@@ -43,7 +45,7 @@ namespace NRPFarmod {
             infoFont.fontSize = 15;
             hotkeyFont.fontSize = 10;
             hotkeyFont.normal.textColor = Color.white;
-            MelonLogger.Error("NRPFarModController");
+            MelonLogger.Msg("Init \u001b[32mNRPFarModController\u001b[0m");
         }
 
         public NRPFarModController() : base() {
@@ -59,8 +61,9 @@ namespace NRPFarmod {
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.O, PreviousSong);
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.P, NextSong);
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.Z, RandomSong);
-
         }
+
+       
         #region Window UI
 
 
@@ -94,23 +97,31 @@ namespace NRPFarmod {
         }
 
         private void NextSong() {
-            if(godConstant == null) {
-                godConstant = UnityEngine.Object.FindObjectOfType<GodConstant>();            
-            }
-            if(godConstant != null) {
-                contentManager.LoadNextSong(godConstant.musicSource);
-            }
+            if (CheckGodConstant()) {
+                contentManager.LoadNextSong(godConstant!.musicSource);
+            }                   
         }
 
         private void PreviousSong() {
-
+            if (CheckGodConstant()) {
+                contentManager.LoadPrevSong(godConstant!.musicSource);
+            }
         }
 
         private void RandomSong() {
-
+            if (CheckGodConstant()) {
+                contentManager.LoadRandomSong(godConstant!.musicSource);
+            }
         }
 
         #endregion
+
+        private bool CheckGodConstant() {
+            if (godConstant == null) {
+                godConstant = GodConstant.Instance; //Warum jedes mal die komplette Assembly nach ner Instanz durchsuchen :D
+            }
+            return !(godConstant == null);
+        }
 
         public override void OnApplicationQuit() {
             contentManager.Dispose();

@@ -4,26 +4,45 @@ using NAudio.Wave;
 using UnityEngine.Networking;
 using UnityEngine;
 using System.Collections;
+using MelonLoader.TinyJSON;
+using System.Text.Json;
+using NRPFarmod.CustomUnityScripts;
 
 namespace NRPFarmod.ContentManager {
 
 
     /// <summary>
+    /// Speichert Informationen über einen Song
+    /// </summary>
+    public sealed class AudiClipInfo {
+        /// <summary>
+        /// Voller Pfad zur Datei
+        /// </summary>
+        public string FullPath { get; set; } = string.Empty;
+        /// <summary>
+        /// Text welcher im Display angezeigt wird
+        /// </summary>
+        public string UI_Display { get; set; } = string.Empty;
+        /// <summary>
+        /// Additionaler Volume Faktor
+        /// </summary>
+        public float Volume { get; set; } = 0f;
+        /// <summary>
+        /// Additionaler Pitch Faktor
+        /// </summary>
+        public float Pitch { get; set; } = 0f;
+    }
+
+    /// <summary>
     /// Neuer Song erstellt
     /// </summary>
-    public class NewAudioClipEventArgs : EventArgs {
+    public class NewAudioClipPlaying : EventArgs {
         public readonly UnityEngine.AudioClip clip;
-        public NewAudioClipEventArgs(UnityEngine.AudioClip clip) {
+        public NewAudioClipPlaying(UnityEngine.AudioClip clip) {
             this.clip = clip ?? new UnityEngine.AudioClip();
         }
     }
 
-    /// <summary>
-    /// Music Data
-    /// </summary>
-    /// <param name="FilePath"></param>
-    /// <param name="FileName"></param>
-    public record CustomMusic(string FilePath, string FileName);
 
     public class ContentManager<T> : IDisposable where T : UnityEngine.Object {
 
@@ -43,7 +62,7 @@ namespace NRPFarmod.ContentManager {
         /// <summary>
         /// Speichert Musik und Index
         /// </summary>
-        protected IReadOnlyDictionary<int, CustomMusic>? MusicData;
+        protected IReadOnlyDictionary<int, AudiClipInfo>? MusicData;
         /// <summary>
         /// Clean Audiofiles
         /// </summary>
@@ -58,13 +77,13 @@ namespace NRPFarmod.ContentManager {
         /// <summary>
         /// Wird ausgelöst wenn ein neuer Song geladen wurde
         /// </summary>
-        public event EventHandler<NewAudioClipEventArgs>? NewAudiClip;
+        public event EventHandler<NewAudioClipPlaying>? NewAudiClip;
         /// <summary>
         /// Raise Event
         /// </summary>
         /// <param name="args"></param>
-        protected virtual void OnNewAudioClip(NewAudioClipEventArgs args) {
-            EventHandler<NewAudioClipEventArgs>? handler = NewAudiClip;
+        protected virtual void OnNewAudioClip(NewAudioClipPlaying args) {
+            EventHandler<NewAudioClipPlaying>? handler = NewAudiClip;
             handler?.Invoke(this, args);
         }
 
@@ -75,7 +94,7 @@ namespace NRPFarmod.ContentManager {
         /// Konstruktor
         /// </summary>
         public ContentManager() {
-            TempPath = Path.Combine(Environment.CurrentDirectory, $"Mods\\src\\{Guid.NewGuid().ToString().Replace("-", "")}");
+            TempPath = Path.Combine(Environment.CurrentDirectory, $"Mods\\src\\used");
             if (!Directory.Exists(TempPath)) Directory.CreateDirectory(TempPath);
             ContentFolder = Path.Combine(Environment.CurrentDirectory, "Mods\\src\\");
             managedContent = new ManagedContent<T>();
@@ -88,22 +107,65 @@ namespace NRPFarmod.ContentManager {
             //Konvertieren und verschieben
             ConvertMp3ToWave(ContentFolder);
             //Musik aus alle Ordner laden und in den Ordner einfügen
-            MusicData = LoadWaveFiles(ContentFolder)
-            .Concat(LoadWaveFiles(TempPath))
-            .Select((file, index) => new { Index = index, File = file })
-            .ToDictionary(x => x.Index, x => x.File);
+            LoadSettingFile();
         }
+
+        /// <summary>
+        /// Behandelt die Json Settings
+        /// </summary>
+        private void LoadSettingFile() {
+
+            var curMusikData = LoadWaveFiles(ContentFolder)
+                .Concat(LoadWaveFiles(TempPath))
+                .Select((file, index) => new { Index = index, File = file })
+                .ToDictionary(x => x.Index, x => x.File);
+
+            var file = Path.Combine(ContentFolder, "Settings.json");
+
+            var resultDict = new Dictionary<int, AudiClipInfo>();
+
+            if(File.Exists(file)) {
+                string content = File.ReadAllText(file);
+                var set = JsonSerializer.Deserialize<AudiClipInfo[]>(content);
+                if (set != null) {
+                    foreach(var clip in set) {
+                        resultDict.Add(resultDict.Count, clip);
+                        MelonLogger.Msg($"Load SongInfo: {clip.UI_Display}");
+                        if(curMusikData.Any(x => x.Value.FullPath == clip.FullPath)) {
+                            int index = curMusikData.First(x => x.Value.FullPath == clip.FullPath).Key;
+                            curMusikData.Remove(index);
+                        }
+                    }
+                    foreach(var newClip in curMusikData) {
+                        resultDict.Add(resultDict.Count, newClip.Value);
+                        MelonLogger.Msg($"New SongInfo: {newClip.Value.UI_Display}");
+                    }
+                    MusicData = resultDict;
+                }
+            } else {
+                MusicData = curMusikData;
+            }
+
+            string myContent = JsonSerializer.Serialize(MusicData!.Select(x => x.Value).ToArray(), new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(file, myContent);
+        }
+
         /// <summary>
         /// Informationen über die Wave Dateien sammeln
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public virtual IReadOnlyList<CustomMusic> LoadWaveFiles(string folderPath) {
+        public virtual IReadOnlyList<AudiClipInfo> LoadWaveFiles(string folderPath) {
             var waveFiles = Directory.GetFiles(folderPath, "*.wav");
             if (waveFiles != null) {
-                return waveFiles.Select(x => new CustomMusic(Path.GetFileName(x), x)).ToList();
+                return waveFiles.Select(x => new AudiClipInfo() {
+                    FullPath = x,
+                    Pitch = 0.0f,
+                    Volume = 0.0f,
+                    UI_Display = Path.GetFileName(x)
+                }).ToList();
             }
-            return new List<CustomMusic>();
+            return new List<AudiClipInfo>();
         }
         /// <summary>
         /// Konvertiert die Mp3 Dateien und verschiebt sie in den TempPfad
@@ -113,10 +175,15 @@ namespace NRPFarmod.ContentManager {
             var mp3Files = Directory.GetFiles(folderPath, "*.mp3");
             foreach (var mp3 in mp3Files) {
                 try {
-                    MelonLogger.Msg($"Start Convert {mp3}");
                     var newFileName = Path.Combine(TempPath, Path.GetFileName(mp3).Replace(".mp3", ".wav"));
+                    if (File.Exists(newFileName)) {
+                        MelonLogger.Msg($"Skip Song: {Path.GetFileName(mp3)}");
+                        continue;
+                    }
+                    MelonLogger.Msg($"Start Convert {Path.GetFileName(mp3)}");
                     using (var mp3Reader = new Mp3FileReader(mp3)) {
-                        using (var waveStream = WaveFormatConversionStream.CreatePcmStream(mp3Reader)) {
+                        var waveFormat = new WaveFormat(44100, 16, 2);
+                        using (var waveStream = new WaveFormatConversionStream(waveFormat, mp3Reader)) {
                             WaveFileWriter.CreateWaveFile(newFileName, waveStream);
                         }
                     }
@@ -167,9 +234,11 @@ namespace NRPFarmod.ContentManager {
         /// </summary>
         /// <param name="player"></param>
         protected virtual void PlayCurrentSong(AudioSource player) {
-            if (managedContent.type == typeof(AudioClip)) {
+            if (managedContent.Value is AudioClip clip) {
+                OnNewAudioClip(new NewAudioClipPlaying(clip));
                 player.clip = managedContent.Value as AudioClip;
                 player.Play();
+                AudioClipTrigger.SetNowPlaying(MusicData?[currentIndex].UI_Display ?? "Outsch :3");
             } else {
                 MelonLogger.Error($"Type {typeof(T)} not supported");
             }
@@ -184,7 +253,7 @@ namespace NRPFarmod.ContentManager {
             if (MusicData?.Count is <= 0) throw new NullReferenceException(nameof(MusicData));
             if (currentIndex < 0 || currentIndex >= MusicData!.Count) throw new IndexOutOfRangeException(nameof(currentIndex));
             var song = MusicData[currentIndex];
-            MelonCoroutines.Start(LoadAudioClipHTTP(song.FileName, new Action<object>((input) => {
+            MelonCoroutines.Start(LoadAudioClipHTTP(song.FullPath, new Action<object>((input) => {
                 PostCall?.Invoke((T)input);
             })));
         }
@@ -213,9 +282,9 @@ namespace NRPFarmod.ContentManager {
         /// </summary>
         public void Dispose() {
             managedContent.Dispose();
-            Directory.Delete(TempPath, true);
         }
         #endregion
+
 
     }
 }
