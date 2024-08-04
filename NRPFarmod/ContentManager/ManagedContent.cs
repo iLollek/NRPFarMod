@@ -1,10 +1,14 @@
 ﻿using MelonLoader;
 using System;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace NRPFarmod.ContentManager {
 
     public class ManagedContent<T> : IDisposable where T : UnityEngine.Object {
+
+
+        protected List<double> MemoryInformation = new();
 
         private T? content = null;
 
@@ -28,15 +32,16 @@ namespace NRPFarmod.ContentManager {
         }
 
         public virtual void UnloadContent() {
+            MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
             if (content is AudioClip clip) {
                 Logger(clip.UnloadAudioData);
-                Logger(UnityEngine.Object.DestroyImmediate, clip);
             }
             Logger(Resources.UnloadAsset, content);
             Logger(UnityEngine.Object.DestroyImmediate, content);
             GC.Collect();
             GC.WaitForPendingFinalizers();
             content = null;
+            MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
         }
         #endregion
 

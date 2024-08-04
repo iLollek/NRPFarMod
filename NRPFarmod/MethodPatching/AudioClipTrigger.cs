@@ -6,12 +6,13 @@ using UnityEngine;
 namespace NRPFarmod.CustomUnityScripts {
 
 
+
     //https://github.com/pardeike/Harmony/releases/tag/v2.3.3.0
 
     [HarmonyPatch(typeof(RCC_DashboardInputs), nameof(RCC_DashboardInputs.start_fade_nowPlaying))]
     public static class AudioClipTrigger {
 
-        private static string lastSong = string.Empty;
+        public static string CurrentSong { get; private set; } = string.Empty;
 
         private static RCC_DashboardInputs? Instanz;
 
@@ -21,9 +22,9 @@ namespace NRPFarmod.CustomUnityScripts {
             if (Instanz == null) {
                 Instanz = UnityEngine.Object.FindObjectOfType<RCC_DashboardInputs>();
             } else {
-                if (Instanz.ui_nowPlayingText.text != lastSong) {
-                    lastSong = Instanz.ui_nowPlayingText.text;
-                    MelonLogger.Msg($"Now Playling: {lastSong}");
+                if (Instanz.ui_nowPlayingText.text != CurrentSong) {
+                    CurrentSong = Instanz.ui_nowPlayingText.text;
+                    MelonLogger.Msg($"Now Playling: {CurrentSong}");
                 }
             }
         }

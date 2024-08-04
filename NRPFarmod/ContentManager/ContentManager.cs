@@ -7,6 +7,7 @@ using System.Collections;
 using MelonLoader.TinyJSON;
 using System.Text.Json;
 using NRPFarmod.CustomUnityScripts;
+using static Il2Cpp.GodConstant;
 
 namespace NRPFarmod.ContentManager {
 
@@ -90,6 +91,15 @@ namespace NRPFarmod.ContentManager {
         #endregion
 
         #region Konstruktor & Initialize
+        /// <summary>
+        /// Speichert die aktuellen Songdaten
+        /// </summary>
+        private void SafeSettings() {
+            var file = Path.Combine(ContentFolder, "Settings.json");
+            string myContent = JsonSerializer.Serialize(MusicData!.Select(x => x.Value).ToArray(), new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(file, myContent);
+        }
+
         /// <summary>
         /// Konstruktor
         /// </summary>
@@ -281,6 +291,7 @@ namespace NRPFarmod.ContentManager {
         /// Cleanup
         /// </summary>
         public void Dispose() {
+            SafeSettings();
             managedContent.Dispose();
         }
         #endregion

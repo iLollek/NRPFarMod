@@ -7,6 +7,7 @@ using NRPFarmod.ContentManager;
 using Il2Cpp;
 using NRPFarmod.CustomUnityScripts;
 using Il2CppInterop.Runtime.Injection;
+using NRPFarmod.UIHelper;
 
 
 
@@ -15,14 +16,18 @@ namespace NRPFarmod {
     public class NRPFarModController : MelonCaller {
 
 
+        private Color UIBackground = new Color(30f / 255f, 30f / 255f, 30f / 255f);
+        private Color UIForeground = Color.green;
+        private bool windowStyle = false;
         private readonly ContentManager<AudioClip> contentManager = new();
-
-        private Rect windowRect = new Rect(20, 20, 250, 110);
+        private Rect windowRect = new Rect(20, 20, 600, 300);
         private bool IsVisible = false;
-        private readonly GUIStyle infoFont = new();
-        private readonly GUIStyle hotkeyFont = new();
+        private GUIStyle infoFont = new();
+        private GUIStyle hotkeyFont = new();
 
         private GodConstant? godConstant;
+
+        private UITabControl UITabControl;
 
 
         #region Instanz
@@ -30,7 +35,7 @@ namespace NRPFarmod {
         private static NRPFarModController? _instanz = null;
 
         public static NRPFarModController? Instanz {
-            get => LockMe();          
+            get => LockMe();
         }
 
         private static NRPFarModController? LockMe() {
@@ -45,15 +50,19 @@ namespace NRPFarmod {
             infoFont.fontSize = 15;
             hotkeyFont.fontSize = 10;
             hotkeyFont.normal.textColor = Color.white;
+
+
             MelonLogger.Msg("Init \u001b[32mNRPFarModController\u001b[0m");
         }
 
         public NRPFarModController() : base() {
             _instanz = this;
+            UITabControl = new UITabControl(ref windowRect, new Vector2(2, 17), new Vector2(windowRect.width - 2, windowRect.height - 17));
         }
 
 
         public override void OnMelonCallerLoaded() {
+
             MelonLogger.Msg("Sart Convert...");
             contentManager.OnInitialize();
             MelonLogger.Msg(ConsoleColor.Green, "Convert end...");
@@ -61,16 +70,30 @@ namespace NRPFarmod {
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.O, PreviousSong);
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.P, NextSong);
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.Z, RandomSong);
+
+
+
+            //UI Tab Chain erstellen und Initialisieren
+            UITabControl.AddContent("Current Song", new Action(() => {
+                //Draw UI
+            })).AddContent("Edit Song", new Action(() => {
+                //Draw UI
+            })).AddContent("Memory View", new Action(() => {
+                //Draw UI
+            })).Initialize(); //Init
+
+            //Anschließend Registrieren
+            NRPFarMod.Instanz?.Register(UITabControl);
         }
 
-       
         #region Window UI
-
-
-
 
         public override void OnGUI() {
             if (IsVisible) {
+                GUI.backgroundColor = UIBackground;
+                GUI.skin.window.normal.textColor = UIForeground;
+                GUI.skin.window.hover.textColor = UIForeground;
+                GUI.skin.window.active.textColor = UIBackground;
                 windowRect = GUI.Window(0, windowRect, (GUI.WindowFunction)DrawWindow, "NRPFarMod by Farliam & iLollek - 2024");
             } else {
                 GUI.Label(new Rect(Screen.width - 425, 10, 425, 50), "NRPFarMod - Custom Song Loader - Made by Farliam & iLollek", infoFont);
@@ -79,10 +102,7 @@ namespace NRPFarmod {
         }
 
         public void DrawWindow(int windowID) {
-            if (GUI.Button(new Rect(10, 70, 200, 20), "Play")) {
-
-            }
-            GUI.Label(new Rect(10, 91, 200, 20), "Hotkeys: O/P", hotkeyFont);
+            UITabControl.DrawWindowData(windowID);
             GUI.DragWindow(new Rect(0, 0, 10000, 20));
         }
 
@@ -92,6 +112,7 @@ namespace NRPFarmod {
 
         private void SwitchWindowVisibility() {
             IsVisible = !IsVisible;
+            UITabControl.Visibility = IsVisible;
             Cursor.visible = IsVisible;
             Cursor.lockState = IsVisible ? CursorLockMode.None : CursorLockMode.Locked;
         }
@@ -99,7 +120,7 @@ namespace NRPFarmod {
         private void NextSong() {
             if (CheckGodConstant()) {
                 contentManager.LoadNextSong(godConstant!.musicSource);
-            }                   
+            }
         }
 
         private void PreviousSong() {
