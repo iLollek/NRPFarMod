@@ -95,12 +95,12 @@ namespace NRPFarmod {
             fontSize = 20,
             normal = new GUIStyleState {
                 textColor = Color.green
-            }            
+            }
         };
 
         private GUIContent CurrentPlayingContent = new GUIContent("");
 
-        
+
 
 
         private void DrawCurrentSongUI() {
@@ -120,52 +120,77 @@ namespace NRPFarmod {
 
         private Texture2D? memoryView = null;
 
+        private List<(int, double)> lastValues = new();
+
         private void DrawMemoryView() {
             Rect drawArea = new Rect(5, UITabControl.ClientArea.y + 10, windowRect.width - 12, windowRect.height - 60);
             GUI.Box(drawArea, "");
 
-            if(memoryView == null) {
+            if (memoryView == null) {
                 memoryView = new Texture2D((int)drawArea.width - 10, (int)drawArea.height - 80);
-                RefreshMemoryViewTexture();
+                if(RefreshMemoryViewTexture(out var newValue)) {
+                    lastValues = newValue;
+                }        
             }
 
             GUI.DrawTexture(new Rect(10, UITabControl.ClientArea.y + 20, windowRect.width - 22, windowRect.height - 80), memoryView);
 
-            if (GUI.Button(new Rect(10, windowRect.height - 20, 50, 15), "Refresh")) {
-                RefreshMemoryViewTexture();
+            foreach (var label in lastValues) {
+                GUI.Label(new Rect(drawArea.x, drawArea.height -  label.Item1, 200, 30), $"{label.Item2} MB");
             }
-            
+
         }
+
+        public Color LineColor = new Color(0, 0, 0, 100);
 
         public Color MemoryViewColor = Color.green;
 
         public Color MemoryViewBackColor = new Color(30f / 255f, 30f / 255f, 30f / 255f);
 
-        private void RefreshMemoryViewTexture() {
-            if (memoryView == null || contentManager.Memory.Count < 2) return;
-
-            double xSteper = (double)memoryView.width / (contentManager.Memory.Count - 1);
-
-            double minValue = contentManager.Memory.Min();
-            double maxValue = contentManager.Memory.Max();
-
-            double pufferOffset = ((maxValue - minValue) / 100) * 10;
-
-            minValue -= pufferOffset;
-            maxValue += pufferOffset;
-
-            minValue = Math.Floor(minValue );
-            maxValue = Math.Ceiling(maxValue);
+        private bool RefreshMemoryViewTexture(out List<(int,double)> graph) {
+            graph = new List<(int,double)> ();
+            if (memoryView == null) return false;
 
             for (int x = 0; x < memoryView.width; x++) {
                 for (int y = 0; y < memoryView.height; y++) {
                     memoryView.SetPixel(x, y, MemoryViewBackColor);
                 }
             }
+            if (contentManager.Memory.Count < 2) return false;
+
+            double xSteper = (double)memoryView.width / (contentManager.Memory.Count - 1);
+
+            double minValue = contentManager.Memory.Min();
+            double maxValue = contentManager.Memory.Max();
+
+            
+            double pufferOffset = ((maxValue - minValue) / 100) * 10;
+            minValue -= pufferOffset;
+            maxValue += pufferOffset;
+
+            minValue = Math.Floor(minValue);
+            maxValue = Math.Ceiling(maxValue);
 
 
 
             double ySteper = (maxValue - minValue) / memoryView.height;
+
+            double lineStep = memoryView.height / 4;
+            double lineState = lineStep;
+
+            for (int i = 0; i < 4; i++)  
+            {
+                for (int x = 0; x < memoryView.width; x++) {
+                    memoryView.SetPixel(x, (int)lineState, LineColor);
+                }
+                double ramValue = minValue + (lineState / ySteper);
+                graph.Add(((int)lineState, Math.Round(ramValue,2)));
+
+                lineState += lineStep;
+            }
+
+
+
 
             Vector2Int? lastPoint = null;
 
@@ -174,8 +199,8 @@ namespace NRPFarmod {
                 int xPos = (int)(i * xSteper);
                 int yPos = (int)((contentManager.Memory[i] - minValue) / ySteper);
 
-                if(xPos >= memoryView.width -1) xPos = memoryView.width - 1;
-                if(yPos >= memoryView.height -1) yPos = memoryView.height - 1;
+                if (xPos >= memoryView.width - 1) xPos = memoryView.width - 1;
+                if (yPos >= memoryView.height - 1) yPos = memoryView.height - 1;
 
                 if (lastPoint == null) {
                     lastPoint = new Vector2Int(xPos, yPos);
@@ -187,6 +212,7 @@ namespace NRPFarmod {
             }
 
             memoryView.Apply();
+            return true;
         }
 
         /// <summary>
@@ -256,18 +282,27 @@ namespace NRPFarmod {
         private void NextSong() {
             if (CheckGodConstant()) {
                 contentManager.LoadNextSong(godConstant!.musicSource);
+                if (RefreshMemoryViewTexture(out var newValue)) {
+                    lastValues = newValue;
+                }
             }
         }
 
         private void PreviousSong() {
             if (CheckGodConstant()) {
                 contentManager.LoadPrevSong(godConstant!.musicSource);
+                if (RefreshMemoryViewTexture(out var newValue)) {
+                    lastValues = newValue;
+                }
             }
         }
 
         private void RandomSong() {
             if (CheckGodConstant()) {
                 contentManager.LoadRandomSong(godConstant!.musicSource);
+                if (RefreshMemoryViewTexture(out var newValue)) {
+                    lastValues = newValue;
+                }
             }
         }
 
@@ -275,8 +310,7 @@ namespace NRPFarmod {
 
         private bool CheckGodConstant() {
             if (godConstant == null) {
-                godConstant = GodConstant.Instance; //Warum jedes mal die komplette Assembly nach ner Instanz durchsuchen :D
-            }
+                godConstant = GodConstant.Instance; 
             return !(godConstant == null);
         }
 

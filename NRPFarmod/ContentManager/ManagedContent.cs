@@ -34,13 +34,13 @@ namespace NRPFarmod.ContentManager {
 
         public virtual void UnloadContent() {
             try {
-                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
+                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 1024.0d));
                 if (content is AudioClip clip) {
                     GodConstant.Instance.musicSource.Stop();
                     Logger(GameObject.DestroyImmediate,clip, true);
                     Logger(Resources.UnloadAsset, clip);
                 }
-                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
+                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 1024.0d));
             }catch(Exception) {
                 MelonLogger.Error($"Object null");
             }
