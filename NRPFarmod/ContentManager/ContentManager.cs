@@ -47,7 +47,7 @@ namespace NRPFarmod.ContentManager {
 
     public class ContentManager<T> : IDisposable where T : UnityEngine.Object {
 
-        #region Private
+        #region Privat
         /// <summary>
         /// Random Numbers
         /// </summary>
@@ -72,6 +72,13 @@ namespace NRPFarmod.ContentManager {
         /// All Files
         /// </summary>
         protected readonly string ContentFolder;
+        #endregion
+
+        #region Property
+        /// <summary>
+        /// Speicherauslastung
+        /// </summary>
+        public IReadOnlyList<double> Memory { get => managedContent.MemoryInformation; }
         #endregion
 
         #region Events
@@ -273,7 +280,7 @@ namespace NRPFarmod.ContentManager {
         /// <param name="path"></param>
         /// <returns></returns>
         private IEnumerator LoadAudioClipHTTP(string path, Action<object> CallBack) {
-            MelonLogger.Msg($"LoadAudioClipHTTP->{path}");
+            MelonLogger.Msg($"LoadAudioClipHTTP->{Path.GetFileName(path)}");
             UnityWebRequest AudioFiles = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.WAV);
             yield return AudioFiles.SendWebRequest();
             if (AudioFiles.isNetworkError) {
@@ -281,6 +288,7 @@ namespace NRPFarmod.ContentManager {
             } else {
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(AudioFiles);
                 clip.name = Path.GetFileNameWithoutExtension(path);
+                AudioFiles.Dispose();
                 CallBack?.Invoke(clip);
             }
         }

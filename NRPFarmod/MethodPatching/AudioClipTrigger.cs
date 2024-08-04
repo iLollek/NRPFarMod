@@ -18,23 +18,34 @@ namespace NRPFarmod.CustomUnityScripts {
 
         //static void Prefix(bool turnOff) {}
 
-        static void Postfix(bool turnOff) {
+        static void Prefix(bool turnOff) {
             if (Instanz == null) {
                 Instanz = UnityEngine.Object.FindObjectOfType<RCC_DashboardInputs>();
             } else {
-                if (Instanz.ui_nowPlayingText.text != CurrentSong) {
-                    CurrentSong = Instanz.ui_nowPlayingText.text;
-                    MelonLogger.Msg($"Now Playling: {CurrentSong}");
-                }
+                CurrentSong = Instanz.ui_nowPlayingText.text;
+                MelonLogger.Msg($"[AudioClipTrigger] Now Playling: {CurrentSong}");
             }
         }
 
+        static AudioClipTrigger() {
+            Instanz = UnityEngine.Object.FindObjectOfType<RCC_DashboardInputs>();
+        }
+
         public static void SetNowPlaying(string message) {
-            if( Instanz != null ) {
+            if (Instanz != null) {
                 Instanz.start_fade_nowPlaying(false);
                 Instanz.ui_nowPlayingText.text = message;
+                CurrentSong = Instanz.ui_nowPlayingText.text;
+                MelonLogger.Msg($"[AudioClipTrigger] Now Playling: {CurrentSong}");
+            } else {
+                Instanz = UnityEngine.Object.FindObjectOfType<RCC_DashboardInputs>();
             }
         }
 
     }
+
+
 }
+
+
+

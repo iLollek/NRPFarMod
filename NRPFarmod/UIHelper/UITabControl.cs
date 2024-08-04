@@ -27,6 +27,10 @@ namespace NRPFarmod.UIHelper {
 
         #region Public Propertys
         /// <summary>
+        /// Gibt ein offset für den Contentbereich zurück
+        /// </summary>
+        public Vector2 ClientArea { get; private set; }
+        /// <summary>
         /// Gibt an ob der TabContainer sichtbar ist
         /// </summary>
         public bool Visibility { get; set; } = false;
@@ -63,17 +67,17 @@ namespace NRPFarmod.UIHelper {
         public class UITabContentInformation {
             public int FontSize { get; set; } = 15;
             public Color Normal_TextColor { get; set; } = Color.white;
-            public Color Hover_TextColor { get; set; } = Color.blue;
+            public Color Hover_TextColor { get; set; } = Color.white;
             public Color Active_TextColor { get; set; } = Color.green;
-            public Color Normal_BackColor { get; set; } = Color.gray;
-            public Color Hover_BackColor { get; set; } = Color.white;
+            public Color Normal_BackColor { get; set; } = new Color(63f / 255f, 64f /255f,70f /255f,255f);
+            public Color Hover_BackColor { get; set; } = new Color(63f / 255f, 64f / 255f, 70f / 255f, 255f);
             public Color Active_BackColor { get; set; } = Color.black;
-            public Color Selected_Normal_TextColor { get; set; } = Color.white;
-            public Color Selected_Hover_TextColor { get; set; } = Color.blue;
+            public Color Selected_Normal_TextColor { get; set; } = Color.green;
+            public Color Selected_Hover_TextColor { get; set; } = Color.green;
             public Color Selected_Active_TextColor { get; set; } = Color.green;
-            public Color Selected_Normal_BackColor { get; set; } = Color.blue;
-            public Color Selected_Hover_BackColor { get; set; } = Color.white;
-            public Color Selected_Active_BackColor { get; set; } = Color.black;
+            public Color Selected_Normal_BackColor { get; set; } = new Color(31f / 255f, 31f / 255, 31f/255,255f);
+            public Color Selected_Hover_BackColor { get; set; } = new Color(31f / 255f, 31f / 255, 31f / 255, 255f);
+            public Color Selected_Active_BackColor { get; set; } = new Color(31f / 255f, 31f / 255, 31f / 255, 255f);
             public static UITabContentInformation Empty { get =>  new UITabContentInformation(); }
         }
         /// <summary>
@@ -99,17 +103,17 @@ namespace NRPFarmod.UIHelper {
                     if (Selected == null) {
                         Selected = new GUIStyle(GUI.skin.button);
                         Selected.fontSize = Information.FontSize;
-                        Selected.normal.textColor = Information.Normal_TextColor;
-                        Selected.hover.textColor = Information.Hover_TextColor;
-                        Selected.active.textColor = Information.Active_TextColor;
+                        Selected.normal.textColor = Information.Selected_Normal_TextColor;
+                        Selected.hover.textColor = Information.Selected_Hover_TextColor;
+                        Selected.active.textColor = Information.Selected_Active_TextColor;
                         Texture2D normalTex = new Texture2D(1, 1);
-                        normalTex.SetPixel(0, 0, Information.Normal_BackColor);
+                        normalTex.SetPixel(0, 0, Information.Selected_Normal_BackColor);
                         normalTex.Apply();
                         Texture2D hoverTex = new Texture2D(1, 1);
-                        hoverTex.SetPixel(0, 0, Information.Hover_BackColor);
+                        hoverTex.SetPixel(0, 0, Information.Selected_Hover_BackColor);
                         hoverTex.Apply();
                         Texture2D activeTex = new Texture2D(1, 1);
-                        activeTex.SetPixel(0, 0, Information.Active_BackColor);
+                        activeTex.SetPixel(0, 0, Information.Selected_Active_BackColor);
                         activeTex.Apply();
                         Selected.normal.background = normalTex;
                         Selected.hover.background = hoverTex;
@@ -126,17 +130,17 @@ namespace NRPFarmod.UIHelper {
                     if (Default == null) {
                         Default = new GUIStyle(GUI.skin.button);
                         Default.fontSize = Information.FontSize;
-                        Default.normal.textColor = Information.Selected_Normal_TextColor;
-                        Default.hover.textColor = Information.Selected_Hover_TextColor;
-                        Default.active.textColor = Information.Selected_Active_TextColor;
+                        Default.normal.textColor = Information.Normal_TextColor;
+                        Default.hover.textColor = Information.Hover_TextColor;
+                        Default.active.textColor = Information.Active_TextColor;
                         Texture2D normalTex = new Texture2D(1, 1);
-                        normalTex.SetPixel(0, 0, Information.Selected_Normal_BackColor);
+                        normalTex.SetPixel(0, 0, Information.Normal_BackColor);
                         normalTex.Apply();
                         Texture2D hoverTex = new Texture2D(1, 1);
-                        hoverTex.SetPixel(0, 0, Information.Selected_Hover_BackColor);
+                        hoverTex.SetPixel(0, 0, Information.Normal_BackColor);
                         hoverTex.Apply();
                         Texture2D activeTex = new Texture2D(1, 1);
-                        activeTex.SetPixel(0, 0, Information.Selected_Active_BackColor);
+                        activeTex.SetPixel(0, 0, Information.Normal_BackColor);
                         activeTex.Apply();
                         Default.normal.background = normalTex;
                         Default.hover.background = hoverTex;
@@ -240,6 +244,8 @@ namespace NRPFarmod.UIHelper {
                 var measure = MeasureString(new GUIContent("Hello World"), pages[0].Information.FontSize);
                 int height = (int)(measure.y < MinHeight ? MinHeight : measure.y);
 
+                ClientArea = new Vector2(Offset.x, Offset.y + height);  
+
                 int xStep = (int)Offset.x;
                 for(int i = 0; i < pages.Count; i++) {
                     var page = pages[i];
@@ -309,6 +315,7 @@ namespace NRPFarmod.UIHelper {
                 } else {
                     if (GUI.Button(page.Header, new GUIContent(page.Name), page.GetDefault)) {
                         CurrentPage = i;
+                        page.AddPageContent?.Invoke();
                     }
                 }
             }

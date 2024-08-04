@@ -8,6 +8,9 @@ using Il2Cpp;
 using NRPFarmod.CustomUnityScripts;
 using Il2CppInterop.Runtime.Injection;
 using NRPFarmod.UIHelper;
+using UnityEngine.Playables;
+
+
 
 
 
@@ -20,7 +23,7 @@ namespace NRPFarmod {
         private Color UIForeground = Color.green;
         private bool windowStyle = false;
         private readonly ContentManager<AudioClip> contentManager = new();
-        private Rect windowRect = new Rect(20, 20, 600, 300);
+        private Rect windowRect = new Rect(20, 20, 800, 300);
         private bool IsVisible = false;
         private GUIStyle infoFont = new();
         private GUIStyle hotkeyFont = new();
@@ -57,13 +60,13 @@ namespace NRPFarmod {
 
         public NRPFarModController() : base() {
             _instanz = this;
-            UITabControl = new UITabControl(ref windowRect, new Vector2(2, 17), new Vector2(windowRect.width - 2, windowRect.height - 17));
+            UITabControl = new UITabControl(ref windowRect, new Vector2(2, 22), new Vector2(windowRect.width - 2, windowRect.height - 22));
         }
 
 
         public override void OnMelonCallerLoaded() {
 
-            MelonLogger.Msg("Sart Convert...");
+            MelonLogger.Msg("Start Convert...");
             contentManager.OnInitialize();
             MelonLogger.Msg(ConsoleColor.Green, "Convert end...");
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.Insert, SwitchWindowVisibility);
@@ -75,11 +78,11 @@ namespace NRPFarmod {
 
             //UI Tab Chain erstellen und Initialisieren
             UITabControl.AddContent("Current Song", new Action(() => {
-                //Draw UI
+                DrawCurrentSongUI();
             })).AddContent("Edit Song", new Action(() => {
-                //Draw UI
+                DrawEditSongUI();
             })).AddContent("Memory View", new Action(() => {
-                //Draw UI
+                DrawMemoryView();
             })).Initialize(); //Init
 
             //Anschließend Registrieren
@@ -88,13 +91,146 @@ namespace NRPFarmod {
 
         #region Window UI
 
+        private GUIStyle CurrentPlaying = new GUIStyle() {
+            fontSize = 20,
+            normal = new GUIStyleState {
+                textColor = Color.green
+            }            
+        };
+
+        private GUIContent CurrentPlayingContent = new GUIContent("");
+
+        
+
+
+        private void DrawCurrentSongUI() {
+            Rect drawArea = new Rect(5, UITabControl.ClientArea.y + 10, windowRect.width - 12, windowRect.height - 60);
+            GUI.Box(drawArea, "");
+            CurrentPlayingContent.text = $"Current Playing: {AudioClipTrigger.CurrentSong}";
+            var size = UITabControl.MeasureString(CurrentPlayingContent, CurrentPlaying.fontSize);
+            var space = (drawArea.width - size.x) / 2;
+
+            Rect labelRect = new Rect(space, drawArea.y + 5, size.x, size.y);
+            GUI.Label(labelRect, CurrentPlayingContent, CurrentPlaying);
+        }
+
+        private void DrawEditSongUI() {
+
+        }
+
+        private Texture2D? memoryView = null;
+
+        private void DrawMemoryView() {
+            Rect drawArea = new Rect(5, UITabControl.ClientArea.y + 10, windowRect.width - 12, windowRect.height - 60);
+            GUI.Box(drawArea, "");
+
+            if(memoryView == null) {
+                memoryView = new Texture2D((int)drawArea.width - 10, (int)drawArea.height - 80);
+                RefreshMemoryViewTexture();
+            }
+
+            GUI.DrawTexture(new Rect(10, UITabControl.ClientArea.y + 20, windowRect.width - 22, windowRect.height - 80), memoryView);
+
+            if (GUI.Button(new Rect(10, windowRect.height - 20, 50, 15), "Refresh")) {
+                RefreshMemoryViewTexture();
+            }
+            
+        }
+
+        public Color MemoryViewColor = Color.green;
+
+        public Color MemoryViewBackColor = new Color(30f / 255f, 30f / 255f, 30f / 255f);
+
+        private void RefreshMemoryViewTexture() {
+            if (memoryView == null || contentManager.Memory.Count < 2) return;
+
+            double xSteper = (double)memoryView.width / (contentManager.Memory.Count - 1);
+
+            double minValue = contentManager.Memory.Min();
+            double maxValue = contentManager.Memory.Max();
+
+            double pufferOffset = ((maxValue - minValue) / 100) * 10;
+
+            minValue -= pufferOffset;
+            maxValue += pufferOffset;
+
+            minValue = Math.Floor(minValue );
+            maxValue = Math.Ceiling(maxValue);
+
+            for (int x = 0; x < memoryView.width; x++) {
+                for (int y = 0; y < memoryView.height; y++) {
+                    memoryView.SetPixel(x, y, MemoryViewBackColor);
+                }
+            }
+
+
+
+            double ySteper = (maxValue - minValue) / memoryView.height;
+
+            Vector2Int? lastPoint = null;
+
+            for (int i = 0; i < contentManager.Memory.Count; i++) {
+
+                int xPos = (int)(i * xSteper);
+                int yPos = (int)((contentManager.Memory[i] - minValue) / ySteper);
+
+                if(xPos >= memoryView.width -1) xPos = memoryView.width - 1;
+                if(yPos >= memoryView.height -1) yPos = memoryView.height - 1;
+
+                if (lastPoint == null) {
+                    lastPoint = new Vector2Int(xPos, yPos);
+                } else {
+                    Vector2Int newPoint = new Vector2Int(xPos, yPos);
+                    DrawLine(lastPoint.Value, newPoint, MemoryViewColor, ref memoryView);
+                    lastPoint = newPoint;
+                }
+            }
+
+            memoryView.Apply();
+        }
+
+        /// <summary>
+        /// Zeichnet eine Linie nach Bresenhams Algorithmus
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="color"></param>
+        /// <param name="texture"></param>
+        void DrawLine(Vector2Int start, Vector2Int end, Color color, ref Texture2D texture) {
+            int dx = Mathf.Abs(end.x - start.x);
+            int dy = Mathf.Abs(end.y - start.y);
+            int sx = (start.x < end.x) ? 1 : -1;
+            int sy = (start.y < end.y) ? 1 : -1;
+            int err = dx - dy;
+            while (true) {
+                texture.SetPixel(start.x, start.y, color);
+
+                if (start.x == end.x && start.y == end.y) break;
+                int e2 = err * 2;
+                if (e2 > -dy) {
+                    err -= dy;
+                    start.x += sx;
+                }
+                if (e2 < dx) {
+                    err += dx;
+                    start.y += sy;
+                }
+            }
+        }
+
         public override void OnGUI() {
             if (IsVisible) {
                 GUI.backgroundColor = UIBackground;
-                GUI.skin.window.normal.textColor = UIForeground;
-                GUI.skin.window.hover.textColor = UIForeground;
-                GUI.skin.window.active.textColor = UIBackground;
-                windowRect = GUI.Window(0, windowRect, (GUI.WindowFunction)DrawWindow, "NRPFarMod by Farliam & iLollek - 2024");
+                UnityEngine.Color color = UnityEngine.Color.green;
+                GUI.skin.window.normal.textColor = color;
+                GUI.skin.window.hover.textColor = color;
+                GUI.skin.window.active.textColor = color;
+                GUI.skin.window.focused.textColor = color;
+                GUI.skin.window.onNormal.textColor = color;
+                GUI.skin.window.onHover.textColor = color;
+                GUI.skin.window.onActive.textColor = color;
+                GUI.skin.window.onFocused.textColor = color;
+                windowRect = GUI.Window(0, windowRect, (GUI.WindowFunction)DrawWindow, "NRPFarMod by Farliam & iLollek - 2024", GUI.skin.window);
             } else {
                 GUI.Label(new Rect(Screen.width - 425, 10, 425, 50), "NRPFarMod - Custom Song Loader - Made by Farliam & iLollek", infoFont);
                 GUI.Label(new Rect(Screen.width - 425, 25, 425, 50), $"Now Playing: ", infoFont);

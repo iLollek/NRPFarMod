@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using Il2Cpp;
+using MelonLoader;
 using System;
 using System.Diagnostics;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace NRPFarmod.ContentManager {
     public class ManagedContent<T> : IDisposable where T : UnityEngine.Object {
 
 
-        protected List<double> MemoryInformation = new();
+        public List<double> MemoryInformation { get; private set; } = new();
 
         private T? content = null;
 
@@ -32,16 +33,17 @@ namespace NRPFarmod.ContentManager {
         }
 
         public virtual void UnloadContent() {
-            MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
-            if (content is AudioClip clip) {
-                Logger(clip.UnloadAudioData);
+            try {
+                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
+                if (content is AudioClip clip) {
+                    GodConstant.Instance.musicSource.Stop();
+                    Logger(GameObject.DestroyImmediate,clip, true);
+                    Logger(Resources.UnloadAsset, clip);
+                }
+                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
+            }catch(Exception) {
+                MelonLogger.Error($"Object null");
             }
-            Logger(Resources.UnloadAsset, content);
-            Logger(UnityEngine.Object.DestroyImmediate, content);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            content = null;
-            MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 102.0d));
         }
         #endregion
 
@@ -54,6 +56,22 @@ namespace NRPFarmod.ContentManager {
             Exception? ex = null;
             try {
                 action(param);
+            } catch (Exception e) {
+                ex = e;
+            }
+#if DEBUG
+            if (ex == null) {
+                MelonLogger.Msg($"Execute {action.Method.Name} -> \u001b[32m(void)ok\u001b[0m");
+            } else {
+                MelonLogger.Error(ex);
+            }
+#endif
+        }
+
+        private void Logger<C,T>(Action<C,T> action, C param, T param_) {
+            Exception? ex = null;
+            try {
+                action(param, param_);
             } catch (Exception e) {
                 ex = e;
             }
