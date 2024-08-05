@@ -14,33 +14,33 @@ namespace NRPFarmod.ContentManager {
 
 
     /// <summary>
-    /// Speichert Informationen über einen Song
+    /// Saves Information about a Song
     /// </summary>
     public sealed class AudioClipInfo {
         /// <summary>
-        /// Voller Pfad zur Datei
+        /// Full path to file
         /// </summary>
         public string FullPath { get; set; } = string.Empty;
         /// <summary>
-        /// Text welcher im Display angezeigt wird
+        /// Text that is shown on the Display
         /// </summary>
         public string UI_Display { get; set; } = string.Empty;
         /// <summary>
-        /// Additionaler Volume Faktor
+        /// Additional Volume Factor
         /// </summary>
         public float Volume { get; set; } = 0f;
         /// <summary>
-        /// Additionaler Pitch Faktor
+        /// Additional Pitch Factor
         /// </summary>
         public float Pitch { get; set; } = 1f;
         /// <summary>
-        /// Additionaler Speed Faktor
+        /// Additional Speed Factor
         /// </summary>
         public float ReverbZoneMix { get; set; } = 1f;
     }
 
     /// <summary>
-    /// Neuer Song erstellt
+    /// New song created
     /// </summary>
     public class NewAudioClipPlaying : EventArgs {
         public readonly UnityEngine.AudioClip clip;
@@ -58,7 +58,7 @@ namespace NRPFarmod.ContentManager {
         /// </summary>
         private readonly System.Random rnd;
         /// <summary>
-        /// Index im Dictionary
+        /// Index in Dictionary
         /// </summary>
         protected int currentIndex = 0;
         /// <summary>
@@ -66,7 +66,7 @@ namespace NRPFarmod.ContentManager {
         /// </summary>
         protected readonly ManagedContent<T> managedContent;
         /// <summary>
-        /// Speichert Musik und Index
+        /// Saves Music and Index
         /// </summary>
         protected IDictionary<int, AudioClipInfo>? MusicData;
         /// <summary>
@@ -81,7 +81,7 @@ namespace NRPFarmod.ContentManager {
 
         #region Property
         /// <summary>
-        /// Getter/Setter für Info
+        /// Getter/Setter for Info
         /// </summary>
         public AudioClipInfo CurrentClipInfo {
             get {
@@ -94,14 +94,14 @@ namespace NRPFarmod.ContentManager {
             }
         }
         /// <summary>
-        /// Speicherauslastung
+        /// Memory dedication
         /// </summary>
         public IReadOnlyList<double> Memory { get => managedContent.MemoryInformation; }
         #endregion
 
         #region Events
         /// <summary>
-        /// Wird ausgelöst wenn ein neuer Song geladen wurde
+        /// Triggered when a new song has been loaded
         /// </summary>
         public event EventHandler<NewAudioClipPlaying>? NewAudiClip;
         /// <summary>
@@ -117,7 +117,7 @@ namespace NRPFarmod.ContentManager {
 
         #region Konstruktor & Initialize
         /// <summary>
-        /// Setzt die Einstellungen zurück
+        /// Resets the settings
         /// </summary>
         public void ResetCurrentSongInfo() {
             try {
@@ -137,7 +137,7 @@ namespace NRPFarmod.ContentManager {
 
         }
         /// <summary>
-        /// Speichert die aktuellen Songdaten
+        /// Saves the current song data
         /// </summary>
         private void SafeSettings() {
             var file = Path.Combine(ContentFolder, "Settings.json");
@@ -146,7 +146,7 @@ namespace NRPFarmod.ContentManager {
         }
 
         /// <summary>
-        /// Konstruktor
+        /// Constructor
         /// </summary>
         public ContentManager() {
             TempPath = Path.Combine(Environment.CurrentDirectory, $"Mods\\src\\used");
@@ -156,7 +156,7 @@ namespace NRPFarmod.ContentManager {
             rnd = new System.Random(Guid.NewGuid().GetHashCode());
         }
         /// <summary>
-        /// Starte konvertieren der Dateien
+        /// Begin conversion of files
         /// </summary>
         public virtual void OnInitialize() {
             //Konvertieren und verschieben
@@ -166,7 +166,7 @@ namespace NRPFarmod.ContentManager {
         }
 
         /// <summary>
-        /// Behandelt die Json Settings
+        /// Handles the Json Settings
         /// </summary>
         private void LoadSettingFile() {
 
@@ -206,7 +206,7 @@ namespace NRPFarmod.ContentManager {
         }
 
         /// <summary>
-        /// Informationen über die Wave Dateien sammeln
+        /// Collect Information about the WAVE files
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -224,7 +224,7 @@ namespace NRPFarmod.ContentManager {
             return new List<AudioClipInfo>();
         }
         /// <summary>
-        /// Konvertiert die Mp3 Dateien und verschiebt sie in den TempPfad
+        /// Converts the Mp3 files and moves them to the TempPath
         /// </summary>
         /// <param name="folderPath"></param>
         public virtual void ConvertMp3ToWave(string folderPath) {
@@ -253,7 +253,7 @@ namespace NRPFarmod.ContentManager {
 
         #region Navigation
         /// <summary>
-        /// Ladet den nächsten Song
+        /// Loads the next Song
         /// </summary>
         public virtual void LoadNextSong(AudioSource player) {
             if (MusicData == null) return;
@@ -264,7 +264,7 @@ namespace NRPFarmod.ContentManager {
             }));
         }
         /// <summary>
-        /// Ladet den vorherigen Song
+        /// Loads the previous Song
         /// </summary>
         public virtual void LoadPrevSong(AudioSource player) {
             if (MusicData == null) return;
@@ -275,7 +275,7 @@ namespace NRPFarmod.ContentManager {
             }));
         }
         /// <summary>
-        /// Lädt einen Random Song
+        /// Loads a random Song
         /// </summary>
         public virtual void LoadRandomSong(AudioSource player) {
             if (MusicData == null) return;
@@ -286,7 +286,7 @@ namespace NRPFarmod.ContentManager {
             }));
         }
         /// <summary>
-        /// Spielt den aktuellen Song
+        /// Plays the current Song
         /// </summary>
         /// <param name="player"></param>
         protected virtual void PlayCurrentSong(AudioSource player) {
@@ -321,7 +321,7 @@ namespace NRPFarmod.ContentManager {
             })));
         }
         /// <summary>
-        /// Lädt den Audioclip
+        /// Loads the Audioclip
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
