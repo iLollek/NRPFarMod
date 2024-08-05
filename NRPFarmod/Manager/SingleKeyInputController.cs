@@ -27,11 +27,11 @@ namespace NRPFarmod {
         #endregion
 
         /// <summary>
-        /// Der letzte gedrückte Key
+        /// Last pressed Keys
         /// </summary>
         private UnityEngine.KeyCode lastKey = UnityEngine.KeyCode.None;
         /// <summary>
-        /// Gibt an ob ein Key gedrückt ist.
+        /// Indicates whether a key is pressed
         /// </summary>
         private bool IsKeyDown = false;
         /// <summary>
@@ -40,7 +40,7 @@ namespace NRPFarmod {
         private Dictionary<UnityEngine.KeyCode, Action> inputActions = new();
 
         /// <summary>
-        /// Fügt eine neue Action hinzu
+        /// Adds a new action
         /// </summary>
         /// <param name="key"></param>
         /// <param name="action"></param>
@@ -48,7 +48,7 @@ namespace NRPFarmod {
             inputActions.Add(key, action);
         }
         /// <summary>
-        /// Entfernt eine bereits vorhandene Action
+        /// Removes an already existing action
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
