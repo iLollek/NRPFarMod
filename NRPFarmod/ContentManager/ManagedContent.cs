@@ -8,7 +8,6 @@ namespace NRPFarmod.ContentManager {
 
     public class ManagedContent<T> : IDisposable where T : UnityEngine.Object {
 
-
         public List<double> MemoryInformation { get; private set; } = new();
 
         private T? content = null;
@@ -34,13 +33,15 @@ namespace NRPFarmod.ContentManager {
 
         public virtual void UnloadContent() {
             try {
-                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 1024.0d));
+                using (var proc = Process.GetCurrentProcess())
+                    MemoryInformation.Add(proc.WorkingSet64 / (1024.0d * 1024.0d));
                 if (content is AudioClip clip) {
                     GodConstant.Instance.musicSource.Stop();
                     Logger(GameObject.DestroyImmediate,clip, true);
                     Logger(Resources.UnloadAsset, clip);
                 }
-                MemoryInformation.Add(Process.GetCurrentProcess().WorkingSet64 / (1024.0d * 1024.0d));
+                using(var proc  = Process.GetCurrentProcess()) 
+                    MemoryInformation.Add(proc.WorkingSet64 / (1024.0d * 1024.0d));           
             }catch(Exception) {
                 MelonLogger.Error($"Object null");
             }
@@ -68,7 +69,7 @@ namespace NRPFarmod.ContentManager {
 #endif
         }
 
-        private void Logger<C,T>(Action<C,T> action, C param, T param_) {
+        private void Logger<C,D>(Action<C,D> action, C param, D param_) {
             Exception? ex = null;
             try {
                 action(param, param_);

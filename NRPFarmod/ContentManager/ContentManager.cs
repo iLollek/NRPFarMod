@@ -8,6 +8,7 @@ using MelonLoader.TinyJSON;
 using System.Text.Json;
 using NRPFarmod.CustomUnityScripts;
 using static Il2Cpp.GodConstant;
+using UnityEngine.Playables;
 
 namespace NRPFarmod.ContentManager {
 
@@ -15,7 +16,7 @@ namespace NRPFarmod.ContentManager {
     /// <summary>
     /// Speichert Informationen über einen Song
     /// </summary>
-    public sealed class AudiClipInfo {
+    public sealed class AudioClipInfo {
         /// <summary>
         /// Voller Pfad zur Datei
         /// </summary>
@@ -31,7 +32,11 @@ namespace NRPFarmod.ContentManager {
         /// <summary>
         /// Additionaler Pitch Faktor
         /// </summary>
-        public float Pitch { get; set; } = 0f;
+        public float Pitch { get; set; } = 1f;
+        /// <summary>
+        /// Additionaler Speed Faktor
+        /// </summary>
+        public float ReverbZoneMix { get; set; } = 1f;
     }
 
     /// <summary>
@@ -63,7 +68,7 @@ namespace NRPFarmod.ContentManager {
         /// <summary>
         /// Speichert Musik und Index
         /// </summary>
-        protected IReadOnlyDictionary<int, AudiClipInfo>? MusicData;
+        protected IDictionary<int, AudioClipInfo>? MusicData;
         /// <summary>
         /// Clean Audiofiles
         /// </summary>
@@ -75,6 +80,19 @@ namespace NRPFarmod.ContentManager {
         #endregion
 
         #region Property
+        /// <summary>
+        /// Getter/Setter für Info
+        /// </summary>
+        public AudioClipInfo CurrentClipInfo {
+            get {
+                return MusicData![currentIndex];
+            }
+            set {
+                if (value != null) {
+                    MusicData![currentIndex] = value;
+                }
+            }
+        }
         /// <summary>
         /// Speicherauslastung
         /// </summary>
@@ -98,6 +116,26 @@ namespace NRPFarmod.ContentManager {
         #endregion
 
         #region Konstruktor & Initialize
+        /// <summary>
+        /// Setzt die Einstellungen zurück
+        /// </summary>
+        public void ResetCurrentSongInfo() {
+            try {
+                if (MusicData == null) return;
+                var file = Path.Combine(ContentFolder, "Settings.json");
+                if (File.Exists(file)) {
+                    string content = File.ReadAllText(file);
+                    var set = JsonSerializer.Deserialize<AudioClipInfo[]>(content);
+                    if (set != null) {
+                        MusicData[currentIndex] = set[currentIndex];
+                        MelonLogger.Msg($"Reset Song Settings: {set[currentIndex].UI_Display}");
+                    }
+                }
+            }catch(Exception ex) {
+                MelonLogger.Error(ex);
+            }
+
+        }
         /// <summary>
         /// Speichert die aktuellen Songdaten
         /// </summary>
@@ -139,21 +177,21 @@ namespace NRPFarmod.ContentManager {
 
             var file = Path.Combine(ContentFolder, "Settings.json");
 
-            var resultDict = new Dictionary<int, AudiClipInfo>();
+            var resultDict = new Dictionary<int, AudioClipInfo>();
 
-            if(File.Exists(file)) {
+            if (File.Exists(file)) {
                 string content = File.ReadAllText(file);
-                var set = JsonSerializer.Deserialize<AudiClipInfo[]>(content);
+                var set = JsonSerializer.Deserialize<AudioClipInfo[]>(content);
                 if (set != null) {
-                    foreach(var clip in set) {
+                    foreach (var clip in set) {
                         resultDict.Add(resultDict.Count, clip);
                         MelonLogger.Msg($"Load SongInfo: {clip.UI_Display}");
-                        if(curMusikData.Any(x => x.Value.FullPath == clip.FullPath)) {
+                        if (curMusikData.Any(x => x.Value.FullPath == clip.FullPath)) {
                             int index = curMusikData.First(x => x.Value.FullPath == clip.FullPath).Key;
                             curMusikData.Remove(index);
                         }
                     }
-                    foreach(var newClip in curMusikData) {
+                    foreach (var newClip in curMusikData) {
                         resultDict.Add(resultDict.Count, newClip.Value);
                         MelonLogger.Msg($"New SongInfo: {newClip.Value.UI_Display}");
                     }
@@ -172,17 +210,18 @@ namespace NRPFarmod.ContentManager {
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public virtual IReadOnlyList<AudiClipInfo> LoadWaveFiles(string folderPath) {
+        public virtual IList<AudioClipInfo> LoadWaveFiles(string folderPath) {
             var waveFiles = Directory.GetFiles(folderPath, "*.wav");
             if (waveFiles != null) {
-                return waveFiles.Select(x => new AudiClipInfo() {
+                return waveFiles.Select(x => new AudioClipInfo() {
                     FullPath = x,
-                    Pitch = 0.0f,
-                    Volume = 0.0f,
+                    Pitch = 1f,
+                    Volume = 0f,
+                    ReverbZoneMix = 1f,
                     UI_Display = Path.GetFileName(x)
                 }).ToList();
             }
-            return new List<AudiClipInfo>();
+            return new List<AudioClipInfo>();
         }
         /// <summary>
         /// Konvertiert die Mp3 Dateien und verschiebt sie in den TempPfad
@@ -253,8 +292,15 @@ namespace NRPFarmod.ContentManager {
         protected virtual void PlayCurrentSong(AudioSource player) {
             if (managedContent.Value is AudioClip clip) {
                 OnNewAudioClip(new NewAudioClipPlaying(clip));
+                GodConstant.Instance.musicVol_Target = 0;
+                player.pitch = 1;
+                player.reverbZoneMix = 1;
                 player.clip = managedContent.Value as AudioClip;
                 player.Play();
+                var sounddata = MusicData![currentIndex];
+                GodConstant.Instance.musicVol_Target = sounddata.Volume;
+                player.pitch = sounddata.Pitch;
+                player.reverbZoneMix = sounddata.ReverbZoneMix;
                 AudioClipTrigger.SetNowPlaying(MusicData?[currentIndex].UI_Display ?? "Outsch :3");
             } else {
                 MelonLogger.Error($"Type {typeof(T)} not supported");

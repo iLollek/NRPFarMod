@@ -51,7 +51,7 @@ namespace NRPFarmod {
                     if (type.GetConstructor(Type.EmptyTypes) != null) {
                         var subModul = Activator.CreateInstance(type);
                         if (subModul != null) subModules.Add(subModul as MelonCaller ?? throw new Exception("Cast Exception"));
-                        MelonLogger.Msg($"CreateInstance: {type}");
+                        MelonLogger.Msg($"CreateInstance: \u001b[32m{type}\u001b[0m");
                     } else {
                         MelonLogger.Msg($"Skip Instance \u001b[33m{type.Name}\u001b[0m [Missing Default ctor]");
                     }
