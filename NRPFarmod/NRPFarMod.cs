@@ -36,7 +36,7 @@ namespace NRPFarmod {
         #endregion
 
         /// <summary>
-        /// Enthält alle Module
+        /// Contains all Modules
         /// </summary>
         private ConcurrentBag<MelonCaller> subModules;
 
@@ -45,7 +45,7 @@ namespace NRPFarmod {
             subModules = new();
             Assembly assembly = Assembly.GetExecutingAssembly();
             var mods = assembly.GetTypes().Where(type => type.IsAssignableTo(typeof(MelonCaller)) && type.BaseType == typeof(MelonCaller)).ToList();
-            MelonLogger.Msg($"Gefundene Module: \u001b[32m{mods.Count}\u001b[0m");
+            MelonLogger.Msg($"Found Module: \u001b[32m{mods.Count}\u001b[0m");
             foreach (var type in mods) {
                 try {
                     if (type.GetConstructor(Type.EmptyTypes) != null) {
@@ -56,7 +56,7 @@ namespace NRPFarmod {
                         MelonLogger.Msg($"Skip Instance \u001b[33m{type.Name}\u001b[0m [Missing Default ctor]");
                     }
                 } catch (Exception ex) {
-                    MelonLogger.Error($"Fehler beim Instanziieren von {type.Name}: {ex.Message}");
+                    MelonLogger.Error($"Error when instanciating {type.Name}: {ex.Message}");
                 }
             }
             foreach (var module in subModules) {
@@ -65,7 +65,7 @@ namespace NRPFarmod {
         }
 
         /// <summary>
-        /// Registriert einen neuen Melon Caller
+        /// Register a new Melon Caller
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="MelonCaller"></param>
