@@ -155,6 +155,13 @@ namespace NRPFarmod {
 
         #region Window
 
+        public override void OnSceneWasLoaded(int buildIndex, string sceneName) {
+            MelonLogger.Msg(ConsoleColor.Yellow, $"New Scene loaded: {sceneName}");
+            CurrentSongNeedInit = true;
+            CurSongTextureLoading = false;
+            AboutNeedInit = true;
+            TextureLoading = false;
+        }
 
         public override void OnGUI() {
 
@@ -171,7 +178,7 @@ namespace NRPFarmod {
                 GUI.skin.window.onFocused.textColor = color;
                 windowRect = GUI.Window(0, windowRect, (GUI.WindowFunction)DrawWindow, "NRPFarMod 08.2024", GUI.skin.window);
             } else {
-                GUI.Label(new Rect(Screen.width - 425, 10, 425, 50), "NRPFarMod 08.2024", infoFont);
+                GUI.Label(new Rect(Screen.width - 150, 10, 425, 50), "NRPFarMod 08.2024", infoFont);
             }
         }
         #endregion
@@ -201,6 +208,7 @@ namespace NRPFarmod {
 
             Rect drawArea = new Rect(5, UITabControl.ClientArea.y + 10, windowRect.width - 12, windowRect.height - 60);
 
+
             if (CurrentSongNeedInit && !CurSongTextureLoading) {
                 CurSongTextureLoading = true;
                 MelonCoroutines.Start(LoadCurrentSongTextures(new Action(() => {
@@ -217,7 +225,6 @@ namespace NRPFarmod {
 
                 CurrentSongNeedInit = false;
             }
-
 
             GUI.Box(drawArea, "");
             CurrentPlayingContent.text = $"Current Playing: {AudioClipTrigger.CurrentSong}";
