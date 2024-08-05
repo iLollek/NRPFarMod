@@ -19,7 +19,7 @@ namespace NRPFarmod {
             }
         };
 
-        //Objecte für SongUI
+        // Objects for SongUI
         private bool EditNeedInit = true;
 
         private GUIStyle EditSongStyle = new GUIStyle() {
@@ -119,7 +119,7 @@ namespace NRPFarmod {
             SingleKeyInputController.Instanz?.AddKeyCallback(KeyCode.Z, RandomSong);
 
 
-            //UI Chain erstellen und Initialisieren
+            // UI Chain create and initialize
             UITabControl.AddContent("Current Song", new Action(() => {
                 DrawCurrentSongUI();
             })).AddContent("Edit Song", new Action(() => {
@@ -130,7 +130,7 @@ namespace NRPFarmod {
                 DrawAbaoutUI();
             })).Initialize(); //Init
 
-            //Anschließend Registrieren
+            // followup: registration
             NRPFarMod.Instanz?.Register(UITabControl);
         }
 
@@ -430,7 +430,7 @@ namespace NRPFarmod {
         }
 
         /// <summary>
-        /// Zeichnet eine Linie nach Bresenhams Algorithmus
+        /// Draws a line according to Bresenhams algorithm
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
