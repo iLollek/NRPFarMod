@@ -10,7 +10,7 @@ namespace NRPFarmod.UIHelper {
 
 
     /// <summary>
-    /// Optionen für die "Header"
+    /// Options for the "Headers"
     /// </summary>
     public enum TabControlHeaderStyle {
         Default = 0,
@@ -20,26 +20,26 @@ namespace NRPFarmod.UIHelper {
 
 
     /// <summary>
-    /// Stellt Methoden bereit um ein TabControl ähnliches Steuerelement zu erzeigen
+    /// Provides methods to create a TabControl-like control
     /// </summary>
     public sealed class UITabControl : MelonCaller {
 
 
         #region Public Propertys
         /// <summary>
-        /// Gibt ein offset für den Contentbereich zurück
+        /// Returns an offset for the content area
         /// </summary>
         public Vector2 ClientArea { get; private set; }
         /// <summary>
-        /// Gibt an ob der TabContainer sichtbar ist
+        /// Indicates whether the TabContainer is visible
         /// </summary>
         public bool Visibility { get; set; } = false;
         /// <summary>
-        /// Mindesthöhe für den Header
+        /// Minimum height for the header
         /// </summary>
         public int MinHeight { get; set; } = 5;
         /// <summary>
-        /// Header Darstellung
+        /// Header Display
         /// </summary>
         public TabControlHeaderStyle HeaderStyle { get; set; } = TabControlHeaderStyle.Expand;
         /// <summary>
@@ -62,7 +62,7 @@ namespace NRPFarmod.UIHelper {
 
         #region Hilfe
         /// <summary>
-        /// Enthält weitere Custom Gestaltungsoptionen
+        /// Includes additional custom design options
         /// </summary>
         public class UITabContentInformation {
             public int FontSize { get; set; } = 15;
@@ -81,7 +81,7 @@ namespace NRPFarmod.UIHelper {
             public static UITabContentInformation Empty { get =>  new UITabContentInformation(); }
         }
         /// <summary>
-        /// Speichert Informationen über eine Page
+        /// Stores information about a page
         /// </summary>
         internal class UITabChild {
             public UITabChild(string name, Action addPageContent) {
@@ -157,19 +157,19 @@ namespace NRPFarmod.UIHelper {
 
         #region Private
         /// <summary>
-        /// Measure String funktioniert nur innerhalb der OnGUI
+        /// Measure String only works within the OnGUI
         /// </summary>
         private bool NeedInit = true;
         /// <summary>
-        /// Bestimmt ob die UI bereits gezeichnet werden kann
+        /// Determines whether the UI can already be drawn
         /// </summary>
         private bool CanDraw = false;
         /// <summary>
-        /// Speicher für die Pages
+        /// Storage for the pages
         /// </summary>
         private List<UITabChild> pages = new();
         /// <summary>
-        /// Current Selected PAge
+        /// Current Selected Page
         /// </summary>
         private int CurrentPage = 0;
         /// <summary>
@@ -181,7 +181,7 @@ namespace NRPFarmod.UIHelper {
         /// </summary>
         public Action<int>? DoWindow { get; private set; }   
         /// <summary>
-        /// Offset Vectorr
+        /// Offset Vector
         /// </summary>
         public Vector2 Offset { get; private set; }
         /// <summary>
@@ -196,9 +196,9 @@ namespace NRPFarmod.UIHelper {
         /// </summary>
         private UITabControl() {}
         /// <summary>
-        /// Erstellt ein neues Tabcontrol
+        /// Creates a new Tabcontrol
         /// </summary>
-        /// <param name="rect">Tabgröße</param>
+        /// <param name="rect">Tabsize</param>
         public UITabControl(ref Rect rectOrginal, Vector2 offset, Vector2 size) {
             ContentDrawAreal = rectOrginal;
             Offset = offset;    
@@ -208,7 +208,7 @@ namespace NRPFarmod.UIHelper {
 
         #region Init
         /// <summary>
-        /// Method Chaining - Füge neue Pages hinzu
+        /// Method Chaining - Add new Pages
         /// </summary>
         /// <param name="Header"></param>
         /// <param name="Content"></param>
@@ -221,7 +221,7 @@ namespace NRPFarmod.UIHelper {
         }
 
         /// <summary>
-        /// Muss einmalig ausgeführt werden um die Dimensionen zu berechnen
+        /// Must be carried out once to calculate the dimensions
         /// </summary>
 
         public void Initialize() {
@@ -232,11 +232,11 @@ namespace NRPFarmod.UIHelper {
         }
 
         /// <summary>
-        /// Berechnen abhängig von <see cref="TabControlHeaderStyle"/> die Header größe
+        /// Calculate the header size depending on <see cref="TabControlHeaderStyle"/>
         /// </summary>
         /// <returns></returns>
         private void CalculateHeaderPosition() {
-            //Nimmt den gesamten Raum und teilt diesen gleichmäßig auf
+            // Takes the entire space and divides it evenly
             if(HeaderStyle == TabControlHeaderStyle.Default || HeaderStyle == TabControlHeaderStyle.Expand) {
 
                 int width = (int)((Size.x - Offset.x) / pages.Count);
@@ -271,7 +271,7 @@ namespace NRPFarmod.UIHelper {
 
         #region Static Helper 
         /// <summary>
-        /// Berechnet die Dimensionen eines GUIContent
+        /// Calculates the dimensions of a GUIContent
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
@@ -287,7 +287,7 @@ namespace NRPFarmod.UIHelper {
         }
 
         /// <summary>
-        /// Überprüft ob die Rechtecke miteinander überschneiden
+        /// Checks whether the rectangles overlap each other
         /// </summary>
         /// <param name="left"></param>
         /// <param name="right"></param>
