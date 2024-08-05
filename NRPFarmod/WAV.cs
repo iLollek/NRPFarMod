@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NRPFarmod {
+
+    [Obsolete("Unused")]
     public class WAV {
         public int ChannelCount { get; private set; }
         public int Frequency { get; private set; }
