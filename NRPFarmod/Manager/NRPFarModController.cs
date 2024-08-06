@@ -23,7 +23,7 @@ namespace NRPFarmod {
         private bool IsVisible = false;
         private GUIStyle infoFont = new();
         private GUIStyle hotkeyFont = new();
-        private GodConstant godConstant;
+        private GodConstant? godConstant = null;
         #endregion
 
         #region Instanz
@@ -141,20 +141,32 @@ namespace NRPFarmod {
         }
 
         private void NextSong() {
-            contentManager.LoadNextSong(godConstant!.musicSource);
-            MemoryGUIManager.RefreshTexture();
+            if (CheckGodConstant()) {
+                contentManager.LoadNextSong(godConstant!.musicSource);
+                MemoryGUIManager.RefreshTexture();
+            }
         }
 
         private void PreviousSong() {
-            contentManager.LoadPrevSong(godConstant!.musicSource);
-            MemoryGUIManager.RefreshTexture();
+            if (CheckGodConstant()) {
+                contentManager.LoadPrevSong(godConstant!.musicSource);
+                MemoryGUIManager.RefreshTexture();
+            }
         }
 
         private void RandomSong() {
-            contentManager.LoadRandomSong(godConstant!.musicSource);
-            MemoryGUIManager.RefreshTexture();
+            if (CheckGodConstant()) {
+                contentManager.LoadRandomSong(godConstant!.musicSource);
+                MemoryGUIManager.RefreshTexture();
+            }
         }
 
+        private bool CheckGodConstant() {
+            if (godConstant == null) {
+                godConstant = GodConstant.Instance;
+            }
+            return godConstant != null;
+        }
         #endregion
 
     }

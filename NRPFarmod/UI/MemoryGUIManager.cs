@@ -22,6 +22,7 @@ namespace NRPFarmod.UI {
         private Color LineColor = new Color(0, 0, 0, 100);
         private Color MemoryViewColor = Color.green;
         private Color MemoryViewBackColor = new Color(30f / 255f, 30f / 255f, 30f / 255f);
+        private Color Transparent = new Color(0, 0, 0, 0);
         private ContentManager<T> contentManager;
 
         public MemoryGUIManager(ContentManager<T> contentManager, Rect windowRect, Vector2 clientArea) {
@@ -52,6 +53,12 @@ namespace NRPFarmod.UI {
 
         public void FirstInit() {
             drawArea = new Rect(5, ClientArea.y + 10, windowRect.width - 12, windowRect.height - 60);
+            memoryView = new Texture2D((int)drawArea.width - 10, (int)drawArea.height - 80);
+            for (int y = 0; y < memoryView.height; y++)
+                for (int x = 0; x < memoryView.width; x++)
+                    memoryView.SetPixel(x, y, Transparent);
+            memoryView.Apply();
+            NeedInit = false;
         }
 
         public IEnumerator LoadTextures() {

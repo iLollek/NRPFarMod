@@ -41,12 +41,23 @@ namespace NRPFarmod.ContentManager {
                     Logger(Resources.UnloadAsset, clip);
                 }
                 using(var proc  = Process.GetCurrentProcess()) 
-                    MemoryInformation.Add(proc.WorkingSet64 / (1024.0d * 1024.0d));           
+                    MemoryInformation.Add(proc.WorkingSet64 / (1024.0d * 1024.0d)); 
+                if(MemoryInformation.Count > 100) {
+                    MemoryInformation.RemoveRange(0, 50);
+                }
             }catch(Exception) {
                 MelonLogger.Error($"Object null");
             }
         }
         #endregion
+
+        public virtual void MemorySnapshot() {
+            using (var proc = Process.GetCurrentProcess())
+                MemoryInformation.Add(proc.WorkingSet64 / (1024.0d * 1024.0d));
+            if (MemoryInformation.Count > 100) {
+                MemoryInformation.RemoveRange(0, 50);
+            }
+        }
 
         #region Interface implementierung
         public void Dispose() => UnloadContent();
