@@ -97,6 +97,10 @@ namespace NRPFarmod.ContentManager {
         /// Memory dedication
         /// </summary>
         public IReadOnlyList<double> Memory { get => managedContent.MemoryInformation; }
+        /// <summary>
+        /// Content Manager
+        /// </summary>
+        public ManagedContent<T> ManagedContent { get => managedContent; }
         #endregion
 
         #region Events
@@ -291,17 +295,14 @@ namespace NRPFarmod.ContentManager {
         /// <param name="player"></param>
         protected virtual void PlayCurrentSong(AudioSource player) {
             if (managedContent.Value is AudioClip clip) {
+                AudioClipTrigger.SetNowPlaying(MusicData?[currentIndex].UI_Display ?? "Outsch :3");
                 OnNewAudioClip(new NewAudioClipPlaying(clip));
-                GodConstant.Instance.musicVol_Target = 0;
-                player.pitch = 1;
-                player.reverbZoneMix = 1;
                 player.clip = managedContent.Value as AudioClip;
-                player.Play();
                 var sounddata = MusicData![currentIndex];
                 GodConstant.Instance.musicVol_Target = sounddata.Volume;
                 player.pitch = sounddata.Pitch;
                 player.reverbZoneMix = sounddata.ReverbZoneMix;
-                AudioClipTrigger.SetNowPlaying(MusicData?[currentIndex].UI_Display ?? "Outsch :3");
+                player.Play();
             } else {
                 MelonLogger.Error($"Type {typeof(T)} not supported");
             }
@@ -320,6 +321,7 @@ namespace NRPFarmod.ContentManager {
                 PostCall?.Invoke((T)input);
             })));
         }
+
         /// <summary>
         /// Loads the Audioclip
         /// </summary>

@@ -76,7 +76,6 @@ namespace NRPFarmod.UI
             Rect drawArea = new Rect(5, ClientArea.y + 10, windowRect.width - 12, windowRect.height - 60);
             GUI.Box(drawArea, $"Edit - {contentManager.CurrentClipInfo.UI_Display}", EditSongBoxStyle);
 
-
             PitchLabel.text = $"Pitch: {Math.Round(contentManager.CurrentClipInfo.Pitch, 2)}";
             VolumeLabel.text = $"Volume: {Math.Round(contentManager.CurrentClipInfo.Volume, 2)}";
             SpeedLabel.text = $"ReverbZoneMix: {Math.Round(contentManager.CurrentClipInfo.ReverbZoneMix, 2)}";
@@ -90,7 +89,7 @@ namespace NRPFarmod.UI
 
             clip.UI_Display = GUI.TextField(EditDisplayRect, contentManager.CurrentClipInfo.UI_Display);
             clip.Pitch = GUI.HorizontalSlider(EditPitchRect, contentManager.CurrentClipInfo.Pitch, -2f, 2f);
-            clip.Volume = GUI.HorizontalSlider(EditVolumeRect, contentManager.CurrentClipInfo.Volume, -10f, 10);
+            clip.Volume = GUI.HorizontalSlider(EditVolumeRect, contentManager.CurrentClipInfo.Volume, -50f, 10);
             clip.ReverbZoneMix = GUI.HorizontalSlider(EditSpeedRect, contentManager.CurrentClipInfo.ReverbZoneMix, 0f, 5f);
 
             SetSongValues(clip.Volume, clip.Pitch, clip.ReverbZoneMix);
