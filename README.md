@@ -62,14 +62,14 @@ It's a relatively common process: Download the Music from your Source (Spotify o
 ### Spotify
 Use a Tool to Download Spotify Music off of. For Playlists, you can use this: [Spotify Playlist Downloader Online](https://spotify-downloader.com/)
 
-After that, convert your Files into WAVE (.wav). You can use [this](https://online-audio-converter.com/) Tool. Select CD Quality or DVD Quality, if available.
+After that, convert your Files into WAVE (.wav). You can use [this](https://offlineconverter.com/audio/mp3-to-wav/) Tool. Leaving the Audio Bitrate at 1411 kbps means CD Quality (recommended)
 
 Finally, move your Downloaded .wav Files into the /src/ Directory where your Mod (NRPFarMod.dll) is located.
 
 ### YouTube
 Use a Tool to Download YouTube Music off of. You can use [this](https://en1.savefrom.net/1-youtube-video-downloader-3vV/) Tool. (Hey! I also made a [YouTube Downloader in Python](https://ilollek.net/pyd-rem/download.html)!)
 
-After that, convert your Files into WAVE (.wav). You can use [this](https://online-audio-converter.com/) Tool. Select CD Quality or DVD Quality, if available.
+After that, convert your Files into WAVE (.wav). You can use [this](https://online-audio-converter.com/) Tool. Leaving the Audio Bitrate at 1411 kbps means CD Quality (recommended)
 
 Finally, move your Downloaded .wav Files into the /src/ Directory where your Mod (NRPFarMod.dll) is located.
 
@@ -147,5 +147,9 @@ The PostCall.bat automatically copies your newly built modfile (.dll) to your Mo
 [iLollek](https://github.com/iLollek/) - NRPFarMod Developer & Repository Owner
 
 [Jem Byrne (PLANET JEM Software)](https://linktr.ee/night_runners) - Developer of the Game that this Mod is developed for
+
+## Credits - Contributors
+
+[rarescolibaba](https://github.com/rarescolibaba) - [Changes on the README](https://github.com/iLollek/NRPFarMod/issues/1#issuecomment-2345365790)
 
 *Using AssetUnlocker is piracy!*
